@@ -27,7 +27,7 @@ import {
   ArrowUp,
   ArrowDown,
   ChevronsUpDown,
-  Trash2,
+  Gift,
   Pencil,
 } from 'lucide-react'
 import {
@@ -110,6 +110,7 @@ const DataTable = <T extends Record<string, unknown>>({
             'category',
             'genre',
             'position',
+            'role',
           ].some((key) => col.toLowerCase().includes(key))
         ) {
           const cls = getColorForValue(String(value))
@@ -322,14 +323,16 @@ const DataTable = <T extends Record<string, unknown>>({
             <Button
               size={'sm'}
               variant={'lightprimary'}
-              className='size-8! rounded-full'>
+              className='size-8! rounded-full'
+              title='Message'>
               <Pencil className='size-5' />
             </Button>
             <Button
               size={'sm'}
               variant={'lighterror'}
-              className='size-8! rounded-full'>
-              <Trash2 className='size-5' />
+              className='size-8! rounded-full'
+              title='Send gift'>
+              <Gift className='size-5' />
             </Button>
           </div>
         )
@@ -393,7 +396,7 @@ const DataTable = <T extends Record<string, unknown>>({
             {/* Search + Download */}
             <div className='pb-4 pt-0 flex items-center justify-between flex-wrap gap-4'>
               <h3 className='text-xl font-semibold mb-2'>
-                Employee Data Table
+                Clubhouse directory
               </h3>
               <div className='flex items-center gap-2 flex-wrap'>
                 <Input
@@ -401,7 +404,7 @@ const DataTable = <T extends Record<string, unknown>>({
                   className='max-w-96 lg:min-w-96 min-w-full placeholder:text-gray-400 dark:placeholder:text-white/20'
                   value={globalFilter ?? ''}
                   onChange={(e) => setGlobalFilter(e.target.value)}
-                  placeholder='Search your relevant items...'
+                  placeholder='Search teammates, teams, or vibes...'
                 />
                 <Button
                   onClick={handleDownload}

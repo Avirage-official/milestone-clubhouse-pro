@@ -50,6 +50,13 @@ const SidebarContent: MenuItem[] = [
         url: '/managers-hub',
         isPro: false,
       },
+      {
+        name: 'Home Hub',
+        icon: 'solar:home-smile-linear',
+        id: uniqueId(),
+        url: '/employee-home-hub',
+        isPro: false,
+      },
     ],
   },
 

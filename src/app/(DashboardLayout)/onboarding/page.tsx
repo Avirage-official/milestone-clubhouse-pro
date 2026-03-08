@@ -153,7 +153,7 @@ export default function OnboardingPage() {
                     <Check className="w-4 h-4" />
                   ) : (
                     <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-xs transition-colors duration-300 ${
-                      s.id === step ? "border-white/60" : "border-current"
+                      s.id === step ? "border-white/90" : "border-current"
                     }`}>
                       {s.id}
                     </span>

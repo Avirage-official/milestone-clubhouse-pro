@@ -43,6 +43,13 @@ const SidebarContent: MenuItem[] = [
         url: '/dashboard',
         isPro: false,
       },
+      {
+        name: 'Managers Hub',
+        icon: 'solar:users-group-rounded-linear',
+        id: uniqueId(),
+        url: '/managers-hub',
+        isPro: false,
+      },
     ],
   },
 

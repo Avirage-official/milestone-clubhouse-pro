@@ -174,7 +174,7 @@ export default function OnboardingPage() {
           ))}
         </div>
         <button
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/dashboard")}
           className="text-sm text-muted-foreground/70 hover:text-primary transition-colors whitespace-nowrap ml-4"
         >
           Skip for now
@@ -219,7 +219,7 @@ export default function OnboardingPage() {
             nudgeFreq={nudgeFreq}
             setNudgeFreq={setNudgeFreq}
             onBack={() => go(2)}
-            onFinish={() => router.push("/")}
+            onFinish={() => router.push("/dashboard")}
           />
         )}
       </div>
@@ -743,7 +743,7 @@ function PetStep({
           </Button>
           <div className="flex items-center gap-3">
             <Link
-              href="/"
+              href="/dashboard"
               className="text-sm text-muted-foreground/70 hover:text-primary transition-colors hidden sm:inline-flex items-center gap-1.5"
             >
               Go to dashboard

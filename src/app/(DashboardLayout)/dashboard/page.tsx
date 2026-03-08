@@ -1,13 +1,13 @@
 
 import React from "react";
-import SalesOverview from "../components/dashboard/SalesOverview";
-import { YearlyBreakup } from "../components/dashboard/YearlyBreakup";
-import { MonthlyEarning } from "../components/dashboard/MonthlyEarning";
-import { RecentTransaction } from "../components/dashboard/RecentTransaction";
-import { ProductPerformance } from "../components/dashboard/ProductPerformance";
-import { Footer } from "../components/dashboard/Footer";
-import { TopCards } from "../components/dashboard/TopCards";
-import ProfileWelcome from "../components/dashboard/ProfileWelcome";
+import SalesOverview from "@/app/components/dashboard/SalesOverview";
+import { YearlyBreakup } from "@/app/components/dashboard/YearlyBreakup";
+import { MonthlyEarning } from "@/app/components/dashboard/MonthlyEarning";
+import { RecentTransaction } from "@/app/components/dashboard/RecentTransaction";
+import { ProductPerformance } from "@/app/components/dashboard/ProductPerformance";
+import { Footer } from "@/app/components/dashboard/Footer";
+import { TopCards } from "@/app/components/dashboard/TopCards";
+import ProfileWelcome from "@/app/components/dashboard/ProfileWelcome";
 
 const page = () => {
   return (

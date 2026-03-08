@@ -40,7 +40,7 @@ const SidebarContent: MenuItem[] = [
         name: 'Modern',
         icon: 'solar:widget-2-linear',
         id: uniqueId(),
-        url: '/',
+        url: '/dashboard',
         isPro: false,
       },
     ],

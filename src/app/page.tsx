@@ -338,7 +338,7 @@ export default function LandingPage() {
               </svg>
             </Link>
             <Link
-              href="/"
+              href="/dashboard"
               className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white/70 backdrop-blur-sm transition hover:bg-white/10 hover:text-white"
             >
               Go to dashboard

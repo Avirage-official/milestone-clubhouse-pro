@@ -14,6 +14,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import styles from "./onboarding.module.css";
 
 /* ─── constants ─── */
 
@@ -69,6 +70,18 @@ const FOCUS_OPTIONS = [
 
 const BREAK_STYLE_OPTIONS = ["Movement", "Mindful", "Social"];
 
+/* simulated-day bar percentages */
+const FOCUS_PCT: Record<string, number> = {
+  "deep-focus": 60,
+  social: 30,
+  default: 45,
+};
+const BREAK_PCT: Record<string, number> = {
+  frequent: 30,
+  light: 15,
+  default: 20,
+};
+
 /* ─── main page ─── */
 
 export default function OnboardingPage() {
@@ -107,25 +120,6 @@ export default function OnboardingPage() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      {/* keyframe animations */}
-      <style>{`
-        @keyframes onb-slide-right {
-          from { opacity: 0; transform: translateX(16px); }
-          to   { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes onb-slide-left {
-          from { opacity: 0; transform: translateX(-16px); }
-          to   { opacity: 1; transform: translateX(0); }
-        }
-        .onb-enter-fwd  { animation: onb-slide-right 0.3s ease-out; }
-        .onb-enter-back { animation: onb-slide-left  0.3s ease-out; }
-        @keyframes onb-blob {
-          0%, 100% { transform: scale(1)   translateY(0);   }
-          50%      { transform: scale(1.05) translateY(-6px); }
-        }
-        .onb-blob { animation: onb-blob 3s ease-in-out infinite; }
-      `}</style>
-
       {/* ── stepper bar ── */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
@@ -170,7 +164,7 @@ export default function OnboardingPage() {
       </div>
 
       {/* ── step content ── */}
-      <div key={animKey} className={dir === "fwd" ? "onb-enter-fwd" : "onb-enter-back"}>
+      <div key={animKey} className={dir === "fwd" ? styles.enterFwd : styles.enterBack}>
         {step === 1 && (
           <ProfileStep
             name={name}
@@ -499,8 +493,8 @@ function SimulatedDay({
   breakFreq: string;
   breakStyles: string[];
 }) {
-  const focusW = focus === "deep-focus" ? 60 : focus === "social" ? 30 : 45;
-  const breakW = breakFreq === "frequent" ? 30 : breakFreq === "light" ? 15 : 20;
+  const focusW = FOCUS_PCT[focus] ?? FOCUS_PCT.default;
+  const breakW = BREAK_PCT[breakFreq] ?? BREAK_PCT.default;
   const socialW = 100 - focusW - breakW;
 
   return (
@@ -732,7 +726,7 @@ function PetPreview({
       </p>
 
       {/* animated pet area */}
-      <div className="relative w-40 h-40 rounded-full bg-gradient-to-br from-primary/30 via-info/20 to-secondary/30 flex items-center justify-center onb-blob">
+      <div className={`relative w-40 h-40 rounded-full bg-gradient-to-br from-primary/30 via-info/20 to-secondary/30 flex items-center justify-center ${styles.blob}`}>
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 via-transparent to-info/20 animate-pulse" />
         <span className="text-6xl relative z-10">{displayEmoji}</span>
       </div>

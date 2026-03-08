@@ -223,9 +223,9 @@ function ProductPreviewCard() {
         {/* Avatar group */}
         <div className="flex -space-x-2">
           {["bg-[#5d87ff]", "bg-[#13deb9]", "bg-[#f6b51e]", "bg-[#8754ec]"].map(
-            (bg, i) => (
+            (bg) => (
               <span
-                key={i}
+                key={bg}
                 className={`inline-block h-7 w-7 rounded-full ${bg} ring-2 ring-[#0b1120]`}
               />
             )
@@ -256,7 +256,7 @@ function ProductPreviewCard() {
         {[40, 65, 50, 80, 55, 90, 70, 60, 85, 45, 75, 95].map(
           (height, i) => (
             <div
-              key={i}
+              key={`bar-${i}-${height}`}
               className="flex-1 rounded-t bg-gradient-to-t from-[#5d87ff]/60 to-[#93b4ff]/80"
               style={{ height: `${height}%` }}
             />

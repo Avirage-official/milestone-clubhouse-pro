@@ -95,17 +95,28 @@ export default function LandingPage() {
             that works in every app and tab
           </p>
 
-          <Link
-            href="/auth/login"
-            className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#2d2455] px-7 py-3.5 text-base font-semibold text-white shadow-xl shadow-[#2d2455]/30 transition hover:bg-[#3b3070]"
-          >
-            Launch team demo
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5d87ff]">
-              <svg className="h-4 w-4 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
+            <Link
+              href="/onboarding"
+              className="group inline-flex items-center gap-3 rounded-full bg-[#2d2455] px-7 py-3.5 text-base font-semibold text-white shadow-xl shadow-[#2d2455]/30 transition hover:bg-[#3b3070] hover:shadow-2xl hover:shadow-[#5d87ff]/20"
+            >
+              Try the demo
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5d87ff] transition-transform group-hover:translate-x-0.5">
+                <svg className="h-4 w-4 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </span>
+            </Link>
+            <Link
+              href="/auth/login"
+              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3 text-sm font-medium text-white/80 backdrop-blur-sm transition hover:bg-white/10 hover:text-white"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3-3h-9m9 0l-3 3m3-3l-3-3" />
               </svg>
-            </span>
-          </Link>
+              Log in to dashboard
+            </Link>
+          </div>
         </div>
 
         {/* ── Hero image + floating cards ──────────── */}
@@ -314,6 +325,27 @@ export default function LandingPage() {
             <BenefitCard text="More protected deep‑work blocks." />
             <BenefitCard text="More real 1:1 lunches and social moments." />
             <BenefitCard text="Higher participation in wellness initiatives — without more meetings." />
+          </div>
+
+          <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5">
+            <Link
+              href="/onboarding"
+              className="group inline-flex items-center gap-3 rounded-full bg-[#5d87ff] px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-[#5d87ff]/25 transition hover:bg-[#4a72e8] hover:shadow-xl hover:shadow-[#5d87ff]/30"
+            >
+              Start the onboarding demo
+              <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </Link>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white/70 backdrop-blur-sm transition hover:bg-white/10 hover:text-white"
+            >
+              Go to dashboard
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0V15" />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>

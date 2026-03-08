@@ -20,6 +20,13 @@ const moodTextColors: Record<PetMood, string> = {
   "Sleepy": "text-info",
 }
 
+const moodBadgeBg: Record<PetMood, string> = {
+  "Happy": "bg-success/10",
+  "Energetic": "bg-warning/10",
+  "Needs attention": "bg-error/10",
+  "Sleepy": "bg-info/10",
+}
+
 const PetCard = () => {
   const [mood, setMood] = useState<PetMood>("Happy")
   const [energy, setEnergy] = useState(75)
@@ -73,8 +80,7 @@ const PetCard = () => {
           <div>
             <h5 className="text-lg font-semibold text-foreground">Your Clubhouse pet</h5>
           </div>
-          <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${moodTextColors[mood]} bg-current/10`}
-            style={{ backgroundColor: "var(--muted)" }}>
+          <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${moodTextColors[mood]} ${moodBadgeBg[mood]}`}>
             {mood}
           </span>
         </div>

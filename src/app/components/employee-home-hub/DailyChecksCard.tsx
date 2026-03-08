@@ -123,14 +123,10 @@ const DailyChecksCard = () => {
                 )}
               </div>
 
-              {/* Edit button */}
               {!check.editing && (
                 <button
                   onClick={() => startEdit(check.id, check.title)}
-                  className="flex-shrink-0 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-muted/40 transition-all duration-200"
-                  style={{ opacity: 0.4 }}
-                  onMouseEnter={e => (e.currentTarget.style.opacity = "1")}
-                  onMouseLeave={e => (e.currentTarget.style.opacity = "0.4")}
+                  className="flex-shrink-0 p-1 rounded opacity-40 hover:opacity-100 hover:bg-muted/40 transition-all duration-200"
                 >
                   <Icon icon="tabler:pencil" className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>

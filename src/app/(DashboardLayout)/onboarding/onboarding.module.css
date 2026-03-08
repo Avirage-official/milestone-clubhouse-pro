@@ -1,24 +1,36 @@
+/* ── step transitions ── */
+
 @keyframes onb-slide-right {
   from {
     opacity: 0;
-    transform: translateX(16px);
+    transform: translateX(24px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
 
 @keyframes onb-slide-left {
   from {
     opacity: 0;
-    transform: translateX(-16px);
+    transform: translateX(-24px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
+
+.enterFwd {
+  animation: onb-slide-right 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.enterBack {
+  animation: onb-slide-left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── floating / breathing effects ── */
 
 @keyframes onb-blob {
   0%,
@@ -26,18 +38,82 @@
     transform: scale(1) translateY(0);
   }
   50% {
-    transform: scale(1.05) translateY(-6px);
+    transform: scale(1.06) translateY(-8px);
   }
-}
-
-.enterFwd {
-  animation: onb-slide-right 0.3s ease-out;
-}
-
-.enterBack {
-  animation: onb-slide-left 0.3s ease-out;
 }
 
 .blob {
   animation: onb-blob 3s ease-in-out infinite;
+}
+
+@keyframes onb-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(93, 135, 255, 0.08) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: onb-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes onb-glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(93, 135, 255, 0.15),
+      0 0 30px rgba(93, 135, 255, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(93, 135, 255, 0.25),
+      0 0 50px rgba(93, 135, 255, 0.1);
+  }
+}
+
+.glowCard {
+  animation: onb-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes onb-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeUp {
+  animation: onb-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.fadeUpDelay1 {
+  animation: onb-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.fadeUpDelay2 {
+  animation: onb-fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+@keyframes onb-ring-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ringRotate {
+  animation: onb-ring-rotate 12s linear infinite;
 }

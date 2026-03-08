@@ -110,6 +110,7 @@ const DataTable = <T extends Record<string, unknown>>({
             'category',
             'genre',
             'position',
+            'role',
           ].some((key) => col.toLowerCase().includes(key))
         ) {
           const cls = getColorForValue(String(value))

@@ -119,8 +119,7 @@ function CheckboxTable() {
                             {tableActionData.map((action, idx) => (
                               <DropdownMenuItem
                                 key={idx}
-                                className='flex gap-3 items-center'
-                                onClick={() => console.log(action.listtitle, item.username)}>
+                                className='flex gap-3 items-center'>
                                 <Icon icon={action.icon} height={18} />
                                 <span>{action.listtitle}</span>
                               </DropdownMenuItem>

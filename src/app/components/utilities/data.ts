@@ -4,7 +4,7 @@ export const EmployeesData = [
       "text": "Alice Johnson",
       "image": "/images/profile/user-1.jpg"
     },
-    "position": "Senior Software Engineer · Product",
+    "roleAndTeam": "Senior Software Engineer · Product",
     "status": "Deep focus",
     "songOfTheDay": "Midnight Focus 🎵",
     "pet": "🦊 Nova"
@@ -14,7 +14,7 @@ export const EmployeesData = [
       "text": "Bob Williams",
       "image": "/images/profile/user-2.jpg"
     },
-    "position": "Marketing Manager · Growth",
+    "roleAndTeam": "Marketing Manager · Growth",
     "status": "In the Clubhouse",
     "songOfTheDay": "Lo-fi Beats Vol. 3 🎵",
     "pet": "🐶 Pixel"
@@ -24,7 +24,7 @@ export const EmployeesData = [
       "text": "Carol Davis",
       "image": "/images/profile/user-3.jpg"
     },
-    "position": "HR Specialist · People Ops",
+    "roleAndTeam": "HR Specialist · People Ops",
     "status": "On break",
     "songOfTheDay": "Chill Vibes Mix 🎵",
     "pet": "🐱 Mochi"
@@ -34,7 +34,7 @@ export const EmployeesData = [
       "text": "David Brown",
       "image": "/images/profile/user-4.jpg"
     },
-    "position": "Product Owner · Platform",
+    "roleAndTeam": "Product Owner · Platform",
     "status": "In the Clubhouse",
     "songOfTheDay": "Deep Work Anthem 🎵",
     "pet": "🤖 Cosmo"
@@ -44,7 +44,7 @@ export const EmployeesData = [
       "text": "Eve Green",
       "image": "/images/profile/user-5.jpg"
     },
-    "position": "Junior Software Engineer · Product",
+    "roleAndTeam": "Junior Software Engineer · Product",
     "status": "Deep focus",
     "songOfTheDay": "Synthwave Dreams 🎵",
     "pet": "🐰 Biscuit"
@@ -54,7 +54,7 @@ export const EmployeesData = [
       "text": "Frank White",
       "image": "/images/profile/user-6.jpg"
     },
-    "position": "Sales Representative · Revenue",
+    "roleAndTeam": "Sales Representative · Revenue",
     "status": "Out today",
     "songOfTheDay": "Morning Coffee Jazz 🎵",
     "pet": "🦜 Kiwi"

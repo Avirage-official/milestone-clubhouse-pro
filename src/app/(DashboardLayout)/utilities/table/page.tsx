@@ -20,7 +20,10 @@ const BCrumb = [
 function page() {
   return (
     <>
-      <BreadcrumbComp title='Table' items={BCrumb} />
+      <BreadcrumbComp title='People in your Clubhouse' items={BCrumb} />
+      <p className='text-muted-foreground text-sm -mt-4 mb-6'>
+        See everyone&apos;s role, vibes, pets, and song of the day.
+      </p>
       <div className='flex gap-6 flex-col '>
         <DataTable data={EmployeesData} />
         <BasicTable />

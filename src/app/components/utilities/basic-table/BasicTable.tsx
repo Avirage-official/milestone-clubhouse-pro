@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Badge } from '@/components/ui/badge'
-import { PerformersData } from '../table-data'
+import { RecognitionData } from '../table-data'
 
 const BasicTable = () => {
   /*Table Action*/
@@ -41,7 +41,8 @@ const BasicTable = () => {
   return (
     <>
       <CardBox>
-        <h3 className='text-xl font-semibold mb-4'>Basic Table</h3>
+        <h3 className='text-xl font-semibold mb-1'>Recent recognition &amp; gifts</h3>
+        <p className='text-sm text-muted-foreground mb-4'>Who&apos;s being celebrated in the Clubhouse.</p>
 
         <div className='flex flex-col border rounded-md border-ld'>
           <div className='-m-1.5 overflow-x-auto'>
@@ -51,26 +52,32 @@ const BasicTable = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead className='text-sm font-semibold '>
-                        Assigned
+                        From
                       </TableHead>
                       <TableHead className='text-sm font-semibold'>
-                        Project
+                        To
                       </TableHead>
                       <TableHead className='text-sm font-semibold'>
-                        Priority
+                        Badge
+                      </TableHead>
+                      <TableHead className='text-sm font-semibold'>
+                        Reason
+                      </TableHead>
+                      <TableHead className='text-sm font-semibold'>
+                        When
                       </TableHead>
                       <TableHead className='text-sm font-semibold'></TableHead>
                     </TableRow>
                   </TableHeader>
 
                   <TableBody>
-                    {PerformersData.map((item, index) => (
+                    {RecognitionData.map((item, index) => (
                       <TableRow key={index} className='border-b border-border'>
-                        {/* Assigned */}
-                        <TableCell className='min-w-[200px]'>
+                        {/* From */}
+                        <TableCell className='min-w-[160px]'>
                           <div className='flex gap-3 items-center'>
                             <Image
-                              src={item.profileImg}
+                              src={item.fromImg}
                               alt='profile'
                               width={40}
                               height={40}
@@ -78,28 +85,50 @@ const BasicTable = () => {
                             />
                             <div>
                               <h6 className='text-sm font-semibold mb-1'>
-                                {item.username}
+                                {item.fromName}
                               </h6>
-                              <p className='text-xs text-muted-foreground font-medium'>
-                                {item.designation}
-                              </p>
                             </div>
                           </div>
                         </TableCell>
 
-                        {/* Project */}
+                        {/* To */}
+                        <TableCell className='min-w-[160px]'>
+                          <div className='flex gap-3 items-center'>
+                            <Image
+                              src={item.toImg}
+                              alt='profile'
+                              width={40}
+                              height={40}
+                              className='h-10 w-10 rounded-full'
+                            />
+                            <div>
+                              <h6 className='text-sm font-semibold mb-1'>
+                                {item.toName}
+                              </h6>
+                            </div>
+                          </div>
+                        </TableCell>
+
+                        {/* Badge */}
+                        <TableCell>
+                          <Badge
+                            className={`text-sm rounded-full py-1 px-3 justify-center ${item.badgeBg}`}>
+                            {item.badge}
+                          </Badge>
+                        </TableCell>
+
+                        {/* Reason */}
                         <TableCell>
                           <p className='text-muted-foreground text-sm font-medium'>
-                            {item.project}
+                            {item.reason}
                           </p>
                         </TableCell>
 
-                        {/* Priority */}
+                        {/* When */}
                         <TableCell>
-                          <Badge
-                            className={`text-sm rounded-full py-1 px-3 justify-center ${item.bgcolor}`}>
-                            {item.priority}
-                          </Badge>
+                          <p className='text-muted-foreground text-sm font-medium'>
+                            {item.when}
+                          </p>
                         </TableCell>
 
                         {/* Actions Dropdown */}

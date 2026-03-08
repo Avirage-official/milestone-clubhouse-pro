@@ -4,111 +4,59 @@ export const EmployeesData = [
       "text": "Alice Johnson",
       "image": "/images/profile/user-1.jpg"
     },
-    "position": "Senior Software Engineer",
-    "salary": 120000,
-    "department": "Engineering",
-    "status": "Active",
-
+    "position": "Senior Software Engineer · Product",
+    "status": "Deep focus",
+    "songOfTheDay": "Midnight Focus 🎵",
+    "pet": "🦊 Nova"
   },
   {
     "name": {
       "text": "Bob Williams",
       "image": "/images/profile/user-2.jpg"
     },
-    "position": "Marketing Manager",
-    "salary": 95000,
-    "department": "Marketing",
-    "status": "Active",
-
+    "position": "Marketing Manager · Growth",
+    "status": "In the Clubhouse",
+    "songOfTheDay": "Lo-fi Beats Vol. 3 🎵",
+    "pet": "🐶 Pixel"
   },
   {
     "name": {
       "text": "Carol Davis",
       "image": "/images/profile/user-3.jpg"
     },
-    "position": "HR Specialist",
-    "salary": 70000,
-    "department": "Human Resources",
-    "status": "On Leave",
-
-
+    "position": "HR Specialist · People Ops",
+    "status": "On break",
+    "songOfTheDay": "Chill Vibes Mix 🎵",
+    "pet": "🐱 Mochi"
   },
   {
     "name": {
       "text": "David Brown",
       "image": "/images/profile/user-4.jpg"
     },
-    "position": "Product Owner",
-    "salary": 110000,
-    "department": "Product Development",
-    "status": "Active",
-
+    "position": "Product Owner · Platform",
+    "status": "In the Clubhouse",
+    "songOfTheDay": "Deep Work Anthem 🎵",
+    "pet": "🤖 Cosmo"
   },
   {
     "name": {
       "text": "Eve Green",
       "image": "/images/profile/user-5.jpg"
     },
-    "position": "Junior Software Engineer",
-    "salary": 80000,
-    "department": "Engineering",
-    "status": "Active",
-
+    "position": "Junior Software Engineer · Product",
+    "status": "Deep focus",
+    "songOfTheDay": "Synthwave Dreams 🎵",
+    "pet": "🐰 Biscuit"
   },
   {
     "name": {
       "text": "Frank White",
       "image": "/images/profile/user-6.jpg"
     },
-    "position": "Sales Representative",
-    "salary": 65000,
-    "department": "Sales",
-    "status": "Active",
-
-  },
-  {
-    "name": {
-      "text": "Grace Black",
-      "image": "/images/profile/user-7.jpg"
-    },
-    "position": "Financial Analyst",
-    "salary": 88000,
-    "department": "Finance",
-    "status": "Active",
-
-  },
-  {
-    "name": {
-      "text": "Henry King",
-      "image": "/images/profile/user-8.jpg"
-    },
-    "position": "CEO",
-    "salary": 250000,
-    "department": "Executive",
-    "status": "Active",
-
-  },
-  {
-    "name": {
-      "text": "Ivy Lee",
-      "image": "/images/profile/user-9.jpg"
-    },
-    "position": "Data Scientist",
-    "salary": 130000,
-    "department": "Data Analytics",
-    "status": "Active",
-
-  },
-  {
-    "name": {
-      "text": "Jack Miller",
-      "image": "/images/profile/user-10.jpg"
-    },
-    "position": "Customer Support Specialist",
-    "salary": 55000,
-    "department": "Customer Service",
-    "status": "Terminated",
-
-
+    "position": "Sales Representative · Revenue",
+    "status": "Out today",
+    "songOfTheDay": "Morning Coffee Jazz 🎵",
+    "pet": "🦜 Kiwi"
   }
 ]

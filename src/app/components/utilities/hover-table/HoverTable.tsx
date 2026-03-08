@@ -40,7 +40,7 @@ function HoverTable() {
 
   return (
     <CardBox>
-      <h3 className='text-xl font-semibold mb-2'>Hover Table</h3>
+      <h3 className='text-xl font-semibold mb-2'>Quick look – Clubhouse vibes</h3>
       <div className='flex flex-col border rounded-md border-ld '>
         <div className='-m-1.5 overflow-x-auto'>
           <div className='p-1.5 min-w-full inline-block align-middle'>
@@ -49,13 +49,13 @@ function HoverTable() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className='text-sm font-semibold '>
-                      Assigned
+                      Name
                     </TableHead>
                     <TableHead className='text-sm font-semibold'>
-                      Project
+                      Team
                     </TableHead>
                     <TableHead className='text-sm font-semibold'>
-                      Priority
+                      Clubhouse status
                     </TableHead>
                     <TableHead className='text-sm font-semibold'>
                       Actions
@@ -68,7 +68,7 @@ function HoverTable() {
                     <TableRow
                       key={index}
                       className='group/row hover:bg-lightprimary  cursor-pointer'>
-                      {/* Assigned */}
+                      {/* Name */}
                       <TableCell className='ps-3 min-w-[200px]'>
                         <div className='flex gap-3 items-center'>
                           <Image
@@ -89,14 +89,14 @@ function HoverTable() {
                         </div>
                       </TableCell>
 
-                      {/* Project */}
+                      {/* Team */}
                       <TableCell>
                         <p className='text-muted-foreground text-sm font-medium'>
                           {item.project}
                         </p>
                       </TableCell>
 
-                      {/* Priority */}
+                      {/* Clubhouse status */}
                       <TableCell>
                         <Badge
                           className={`text-sm rounded-full py-1 px-3 justify-center ${item.bgcolor}`}>

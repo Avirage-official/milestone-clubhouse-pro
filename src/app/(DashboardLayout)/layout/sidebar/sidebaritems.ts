@@ -103,6 +103,13 @@ const SidebarContent: MenuItem[] = [
       },
       {
         id: uniqueId(),
+        name: 'Approvals',
+        icon: 'solar:checklist-minimalistic-linear',
+        url: '/apps/manager-approvals',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
         name: 'HR',
         icon: 'solar:users-group-two-rounded-linear',
         url: '/apps/hr',

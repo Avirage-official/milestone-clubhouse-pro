@@ -1,18 +1,24 @@
 export type TicketStage =
-  | 'new'
-  | 'manager_review'
-  | 'ceo_review'
-  | 'completed'
-  | 'rejected';
+  | 'NEW'
+  | 'MANAGER_REVIEW'
+  | 'CEO_REVIEW'
+  | 'COMPLETED'
+  | 'REJECTED';
 
-export type TicketStatus = 'open' | 'on_hold' | 'closed';
+export type TicketStatus = 'OPEN' | 'ON_HOLD' | 'CLOSED';
 
-export interface TicketType {
-  Id: number;
+export type RequestType =
+  | 'ORG_CHANGE'
+  | 'POLICY_CHANGE'
+  | 'ACCESS_REQUEST'
+  | 'OTHER';
+
+export interface Ticket {
+  id: number;
   title: string;
   description: string;
   companyName: string;
-  requestType: 'org_change' | 'policy_change' | 'access_request' | 'other';
+  requestType: RequestType;
   stage: TicketStage;
   status: TicketStatus;
   assignedToAdmin: string;
@@ -20,5 +26,5 @@ export interface TicketType {
   managerName?: string;
   ceoName?: string;
   submittedAt: string;
-  deleted: boolean;
+  updatedAt: string;
 }

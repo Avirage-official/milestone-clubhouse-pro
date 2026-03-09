@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import CardBox from "@/app/components/shared/CardBox";
 import TicketFilter from "@/app/components/apps/tickets/TicketFilter";
 import TicketListing from "@/app/components/apps/tickets/TicketListing";
-import { TicketType } from "@/app/(DashboardLayout)/types/ticket";
+import { Ticket } from "@/app/(DashboardLayout)/types/ticket";
 
 const TicketsApp = () => {
-  const [tickets, setTickets] = useState<TicketType[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const [filter, setFilter] = useState<string>("total_tickets");
   const [ticketSearch, setTicketSearch] = useState<string>("");
 
@@ -33,7 +33,7 @@ const TicketsApp = () => {
         method: "DELETE",
         body: JSON.stringify({ id }),
       });
-      setTickets((prev) => prev.filter((t) => t.Id !== id));
+      setTickets((prev) => prev.filter((t) => t.id !== id));
     } catch (err) {
       console.error("Error deleting ticket:", err);
     }

@@ -294,3 +294,42 @@ enum BadgeType {
   TEAM_SPARK
   WELLNESS_CHAMP
 }
+
+enum TicketStage {
+  NEW
+  MANAGER_REVIEW
+  CEO_REVIEW
+  COMPLETED
+  REJECTED
+}
+
+enum TicketStatus {
+  OPEN
+  ON_HOLD
+  CLOSED
+}
+
+enum RequestType {
+  ORG_CHANGE
+  POLICY_CHANGE
+  ACCESS_REQUEST
+  OTHER
+}
+
+model Ticket {
+  id              Int          @id @default(autoincrement())
+  title           String
+  description     String
+  companyName     String
+  requestType     RequestType
+  stage           TicketStage  @default(NEW)
+  status          TicketStatus @default(OPEN)
+
+  assignedToAdmin String
+  submittedBy     String
+  managerName     String?
+  ceoName         String?
+
+  submittedAt     DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { isValid, format } from "date-fns";
-import { TicketType } from "@/app/(DashboardLayout)/types/ticket";
+import { Ticket } from "@/app/(DashboardLayout)/types/ticket";
 import CardBox from "../../shared/CardBox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,7 +24,7 @@ const agents = [
 ];
 
 const CreateTicketForm = () => {
-  const [tickets, setTickets] = useState<TicketType[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const [ticketId, setTicketId] = useState<number | undefined>(undefined);
   const [ticketDate, setTicketDate] = useState<string>(
     new Date().toISOString().split("T")[0]
@@ -47,7 +47,7 @@ const CreateTicketForm = () => {
       if (data?.data) {
         setTickets(data.data);
         const maxId = data.data.reduce(
-          (max: number, ticket: TicketType) => (ticket.Id > max ? ticket.Id : max),
+          (max: number, ticket: Ticket) => (ticket.id > max ? ticket.id : max),
           0
         );
         setTicketId(maxId + 1);
@@ -63,18 +63,18 @@ const CreateTicketForm = () => {
       return;
     }
 
-    const newTicket: TicketType = {
-      Id: ticketId!,
+    const newTicket: Ticket = {
+      id: ticketId!,
       title: ticketTitle,
       description: ticketDescription,
       companyName: 'Unassigned',
-      requestType: 'other',
-      stage: 'new',
-      status: 'open',
+      requestType: 'OTHER',
+      stage: 'NEW',
+      status: 'OPEN',
       assignedToAdmin: selectedAgent.name,
       submittedBy: selectedAgent.name,
       submittedAt: new Date(ticketDate).toISOString(),
-      deleted: false,
+      updatedAt: new Date().toISOString(),
     };
 
     try {

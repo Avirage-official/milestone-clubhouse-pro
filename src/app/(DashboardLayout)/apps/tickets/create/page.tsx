@@ -4,22 +4,22 @@ import BreadcrumbComp from "@/app/(DashboardLayout)/layout/shared/breadcrumb/Bre
 
 
 export const metadata: Metadata = {
-    title: "Ticket App",
+    title: "Change Requests",
 };
 
 const BCrumb = [
     {
-        to: "/",
+        to: "/dashboard",
         title: "Home",
     },
     {
-        title: "Tickets",
+        title: "Change Requests",
     },
 ];
 const CreateTickets = () => {
     return (
         <>
-            <BreadcrumbComp title="Tickets App" items={BCrumb} />
+            <BreadcrumbComp title="Change Requests" items={BCrumb} />
             <CreateTicketForm />
 
         </>

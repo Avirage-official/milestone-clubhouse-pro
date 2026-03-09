@@ -2,22 +2,22 @@ import TicketsApp from "@/app/components/apps/tickets";
 import BreadcrumbComp from "../../layout/shared/breadcrumb/BreadcrumbComp";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Ticket App",
+  title: "Change Requests",
 };
 
 const BCrumb = [
   {
-    to: "/",
+    to: "/dashboard",
     title: "Home",
   },
   {
-    title: "Tickets",
+    title: "Change Requests",
   },
 ];
 const Tickets = () => {
   return (
     <>
-      <BreadcrumbComp title="Tickets App" items={BCrumb} />
+      <BreadcrumbComp title="Change Requests" items={BCrumb} />
       <TicketsApp />
     </>
   );

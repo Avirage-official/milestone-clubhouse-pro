@@ -109,6 +109,22 @@ const SidebarContent: MenuItem[] = [
         isPro: false,
       },
       {
+        id: uniqueId(),
+        name: 'People overview',
+        icon: 'solar:users-group-rounded-linear',
+        url: '/apps/team-overview',
+        isPro: false,
+        subtitle: 'HR',
+      },
+      {
+        id: uniqueId(),
+        name: 'My team',
+        icon: 'solar:users-group-rounded-linear',
+        url: '/apps/team-overview',
+        isPro: false,
+        subtitle: 'Managers',
+      },
+      {
         name: 'Blogs',
         id: uniqueId(),
         icon: 'solar:sort-by-alphabet-linear',

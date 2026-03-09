@@ -25,94 +25,91 @@ import {
 } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
 
-const BCrumb = [{ to: '/', title: 'Home' }, { title: 'Forms' }]
+const BCrumb = [
+  { to: '/', title: 'Home' },
+  { title: 'Rituals & Feedback' },
+]
 
 const Page = () => {
   const [time, setTime] = useState('')
-  const [copied, setCopied] = useState(false)
-  const [website, setWebsite] = useState('www.tailwind-admin.com')
   const [switch1, setSwitch1] = useState(false)
   const [switch2, setSwitch2] = useState(true)
   const [switch3, setSwitch3] = useState(true)
+  const [switch4, setSwitch4] = useState(false)
+  const [switch5, setSwitch5] = useState(true)
+  const [switch6, setSwitch6] = useState(false)
 
   const [open, setOpen] = React.useState(false)
   const [date, setDate] = React.useState<Date | undefined>(undefined)
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(website)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    } catch (err) {
-      console.error('Failed to copy:', err)
-    }
-  }
-
   return (
     <>
-      <BreadcrumbComp title='Form Elements' items={BCrumb} />
+      <BreadcrumbComp title='Rituals & Feedback Studio' items={BCrumb} />
+      <p className='text-muted-foreground mb-6'>
+        Design team rituals, collect quick feedback, and celebrate teammates —
+        all with the same polished forms.
+      </p>
       <div className='grid gap-6 grid-cols-1 xl:grid-cols-2'>
+        {/* Card 1 – Team rituals setup (left column) */}
         <div className='flex flex-col gap-6'>
-          {/* Default Inputs */}
           <div className='rounded-xl border border-border md:p-6 p-4'>
-            <h5 className='card-title'>Default Inputs</h5>
+            <h5 className='card-title'>Team rituals setup</h5>
+            <p className='text-sm text-muted-foreground mt-1'>
+              Choose which daily checks and quests show up for your team.
+            </p>
             <div className='mt-6 flex flex-col gap-6'>
-              {/* Basic Input */}
+              {/* Team name */}
               <div>
-                <Label htmlFor='name'>Input</Label>
-                <Input id='name' type='text' required className='mt-2' />
-              </div>
-
-              {/* Input with placeholder */}
-              <div>
-                <Label htmlFor='firstname'>Input with Placeholder</Label>
+                <Label htmlFor='team-name'>Team name</Label>
                 <Input
-                  id='firstname'
+                  id='team-name'
                   type='text'
-                  placeholder='Firstname'
+                  placeholder='e.g. Product, Sales EMEA'
                   required
                   className='mt-2'
                 />
               </div>
 
-              {/* Select */}
+              {/* Ritual name */}
               <div>
-                <Label htmlFor='countries'>Select Input</Label>
+                <Label htmlFor='ritual-name'>Ritual name</Label>
+                <Input
+                  id='ritual-name'
+                  type='text'
+                  placeholder='e.g. Focus Friday'
+                  required
+                  className='mt-2'
+                />
+              </div>
+
+              {/* Default daily checks */}
+              <div>
+                <Label htmlFor='daily-checks'>Default daily checks</Label>
                 <Select>
                   <SelectTrigger className='mt-2 w-full'>
-                    <SelectValue placeholder='Select an option' />
+                    <SelectValue placeholder='Select daily checks' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='us'>United States</SelectItem>
-                    <SelectItem value='ca'>Canada</SelectItem>
-                    <SelectItem value='fr'>France</SelectItem>
-                    <SelectItem value='de'>Germany</SelectItem>
+                    <SelectItem value='inbox'>Inbox triage</SelectItem>
+                    <SelectItem value='calendar'>Calendar review</SelectItem>
+                    <SelectItem value='dashboards'>
+                      Scan dashboards
+                    </SelectItem>
+                    <SelectItem value='quests'>Check quests</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              {/* Password */}
-              <div>
-                <Label htmlFor='password'>Password Input</Label>
-                <Input
-                  id='password'
-                  type='password'
-                  placeholder='Enter your Password'
-                  required
-                  className='mt-2'
-                />
-              </div>
-
-              {/* Datepicker */}
+              {/* Start date */}
               <div className='flex flex-col gap-3'>
-                <Label htmlFor='date' className='px-1'>
-                  Date of birth
+                <Label htmlFor='start-date' className='px-1'>
+                  Start date
                 </Label>
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant='outline'
-                      id='date'
+                      id='start-date'
                       className='w-full justify-between font-normal hover:bg-transparent focus:border-primary'>
                       {date ? date.toLocaleDateString() : 'Select date'}
                       <Icon
@@ -138,12 +135,12 @@ const Page = () => {
                 </Popover>
               </div>
 
-              {/* Time */}
+              {/* Preferred focus block */}
               <div>
-                <Label htmlFor='time'>Time Picker Input</Label>
+                <Label htmlFor='focus-block'>Preferred focus block</Label>
                 <div className='relative mt-2'>
                   <Input
-                    id='time'
+                    id='focus-block'
                     type='time'
                     min='09:00'
                     max='18:00'
@@ -161,111 +158,93 @@ const Page = () => {
                 </div>
               </div>
 
-              {/* Card Input with Icon */}
+              {/* Ritual cadence */}
               <div>
-                <Label htmlFor='card'>Card</Label>
-                <div className='relative mt-2'>
-                  <Icon
-                    icon='uim:master-card'
-                    width='20'
-                    height='20'
-                    className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-500'
+                <Label htmlFor='cadence'>Ritual cadence</Label>
+                <Select>
+                  <SelectTrigger className='mt-2 w-full'>
+                    <SelectValue placeholder='Select cadence' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='daily'>Daily</SelectItem>
+                    <SelectItem value='weekly'>Weekly</SelectItem>
+                    <SelectItem value='monthly'>Monthly</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Ritual focus – Radio group */}
+              <div>
+                <Label>Ritual focus</Label>
+                <RadioGroup
+                  defaultValue='balanced'
+                  className='mt-2 flex flex-wrap gap-6'>
+                  <div className='flex items-center gap-2'>
+                    <RadioGroupItem value='deep-focus' id='deep-focus' />
+                    <Label htmlFor='deep-focus'>Deep focus</Label>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <RadioGroupItem value='wellness' id='wellness' />
+                    <Label htmlFor='wellness'>Wellness</Label>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <RadioGroupItem value='social' id='social' />
+                    <Label htmlFor='social'>Social</Label>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <RadioGroupItem value='balanced' id='balanced' />
+                    <Label htmlFor='balanced'>Balanced</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Feature flag toggles */}
+              <div className='grid grid-cols-2 sm:grid-cols-3 gap-6'>
+                <div className='flex items-center gap-2'>
+                  <Switch
+                    checked={switch1}
+                    onCheckedChange={setSwitch1}
                   />
-                  <Input
-                    id='card'
-                    type='text'
-                    placeholder='Card number'
-                    className='pl-10'
+                  <Label>Enable lunch buddies for this team</Label>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <Switch
+                    checked={switch2}
+                    onCheckedChange={setSwitch2}
                   />
+                  <Label>Show team in Hall of Fame</Label>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Textarea */}
-          <div className='rounded-xl border border-border md:p-6 p-4'>
-            <h5 className='card-title'>Textarea Input</h5>
-            <div className='mt-6 flex flex-col gap-6'>
-              <div>
-                <Label htmlFor='comment'>Description</Label>
-                <Textarea
-                  id='comment'
-                  placeholder='Leave a comment...'
-                  rows={4}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor='disabled-comment'>Description</Label>
-                <Textarea
-                  id='disabled-comment'
-                  placeholder='Disabled'
-                  disabled
-                  rows={4}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor='error-comment' className='text-red-600'>
-                  Description
-                </Label>
-                <Textarea
-                  id='error-comment'
-                  placeholder='Leave a comment...'
-                  rows={4}
-                  className='border-red-600 text-red-600 focus-visible:border-red-600'
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Input Colors */}
-          <div className='rounded-xl border border-border md:p-6 p-4'>
-            <h5 className='card-title'>Input Colors</h5>
-            <div className='mt-6 flex flex-col gap-6'>
-              <div>
-                <Label htmlFor='warning' className='text-warning'>
-                  Warning
-                </Label>
-                <Input
-                  id='warning'
-                  placeholder='Warning input'
-                  variant={'warning'}
-                  className='mt-2'
-                />
-              </div>
-              <div>
-                <Label htmlFor='info' className='text-info'>
-                  Info
-                </Label>
-                <Input
-                  id='info'
-                  placeholder='Info input'
-                  variant={'info'}
-                  className='mt-2'
-                />
-              </div>
-              <div>
-                <Label htmlFor='success' className='text-success'>
-                  Success
-                </Label>
-                <Input
-                  id='success'
-                  placeholder='Success input'
-                  variant={'success'}
-                  className='mt-2'
-                />
+              {/* Buttons */}
+              <div className='flex gap-3'>
+                <Button>Save ritual preset</Button>
+                <Button variant='outline'>Preview in Clubhouse</Button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right side */}
+        {/* Card 2 – Quick pulse survey (right column) */}
         <div className='flex flex-col gap-6'>
-          {/* Input Group with Icons */}
           <div className='rounded-xl border border-border md:p-6 p-4'>
-            <h5 className='card-title'>Input Group</h5>
+            <h5 className='card-title'>Quick pulse survey</h5>
+            <p className='text-sm text-muted-foreground mt-1'>
+              Spin up a 3‑question check‑in for your team.
+            </p>
             <div className='mt-6 flex flex-col gap-6'>
+              {/* Survey title */}
+              <div>
+                <Label htmlFor='survey-title'>Survey title</Label>
+                <Input
+                  id='survey-title'
+                  type='text'
+                  placeholder='e.g. Clubhouse beta check-in'
+                  className='mt-2'
+                />
+              </div>
+
+              {/* Question 1 */}
               <div className='relative'>
                 <Icon
                   icon='solar:letter-linear'
@@ -274,12 +253,13 @@ const Page = () => {
                   className='absolute left-3 top-1/2 -translate-y-1/2'
                 />
                 <Input
-                  type='email'
-                  placeholder='name@example.com'
+                  type='text'
+                  placeholder='How does your workday feel this week?'
                   className='pl-10'
                 />
               </div>
 
+              {/* Question 2 */}
               <div className='relative'>
                 <Icon
                   icon='solar:phone-rounded-linear'
@@ -287,9 +267,14 @@ const Page = () => {
                   height={18}
                   className='absolute left-3 top-1/2 -translate-y-1/2'
                 />
-                <Input type='tel' placeholder='+1' className='pl-10' />
+                <Input
+                  type='text'
+                  placeholder="What's one ritual that's helping?"
+                  className='pl-10'
+                />
               </div>
 
+              {/* Question 3 */}
               <div className='relative'>
                 <Icon
                   icon='solar:global-linear'
@@ -299,109 +284,180 @@ const Page = () => {
                 />
                 <Input
                   type='text'
-                  placeholder='www.example.com'
+                  placeholder="Anything you'd change in the Clubhouse?"
                   className='pl-10'
                 />
               </div>
 
-              <div className='relative'>
-                <Icon
-                  icon='solar:link-round-angle-linear'
-                  width={18}
-                  height={18}
-                  className='absolute left-3 top-1/2 -translate-y-1/2'
-                />
-                <Input
-                  type='text'
-                  placeholder='www.tailwind-admin.com'
-                  className='pl-10'
-                />
-              </div>
-
-              {/* Copy input */}
+              {/* Answer style – Checkboxes */}
               <div>
-                <Label htmlFor='website'>Website</Label>
-                <div className='flex gap-2 mt-2'>
-                  <Input
-                    id='website'
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                  />
-                  <button
-                    onClick={handleCopy}
-                    className='px-3 py-2 text-sm rounded-md border border-ld bg-primary/10 dark:bg-primary/10 text-primary hover:bg-gray-200'>
-                    {copied ? 'Copied' : 'Copy'}
-                  </button>
+                <Label className='mb-2 block'>Answer style</Label>
+                <div className='flex gap-6'>
+                  <div className='flex items-center gap-2'>
+                    <Checkbox id='scale' />
+                    <Label htmlFor='scale'>1–5 scale</Label>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <Checkbox id='emoji' defaultChecked />
+                    <Label htmlFor='emoji'>Emoji scale</Label>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <Checkbox id='text-only' disabled />
+                    <Label htmlFor='text-only'>Text only</Label>
+                  </div>
                 </div>
               </div>
+
+              {/* Survey audience – Radio */}
+              <div>
+                <Label className='mb-2 block'>Survey audience</Label>
+                <RadioGroup
+                  defaultValue='whole-company'
+                  className='flex flex-wrap gap-6'>
+                  <div className='flex items-center gap-2'>
+                    <RadioGroupItem
+                      value='whole-company'
+                      id='whole-company'
+                    />
+                    <Label htmlFor='whole-company'>Whole company</Label>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <RadioGroupItem value='my-teams' id='my-teams' />
+                    <Label htmlFor='my-teams'>My teams only</Label>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <RadioGroupItem
+                      value='custom-list'
+                      id='custom-list'
+                    />
+                    <Label htmlFor='custom-list'>Custom list</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Extra options – Toggles */}
+              <div className='grid grid-cols-2 sm:grid-cols-3 gap-6'>
+                <div className='flex items-center gap-2'>
+                  <Switch
+                    checked={switch3}
+                    onCheckedChange={setSwitch3}
+                  />
+                  <Label>Anonymous responses</Label>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <Switch
+                    checked={switch4}
+                    onCheckedChange={setSwitch4}
+                  />
+                  <Label>Send gentle reminder after 2 days</Label>
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className='flex gap-3'>
+                <Button>Launch survey</Button>
+                <Button variant='outline'>Save as draft</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Card 3 – Recognition & nominations (bottom section) */}
+      <div className='mt-6 rounded-xl border border-border md:p-6 p-4'>
+        <h5 className='card-title'>Recognition & nominations</h5>
+        <p className='text-sm text-muted-foreground mt-1'>
+          Nominate teammates for badges like Star of the day, Focus hero, or
+          Team spark.
+        </p>
+        <div className='mt-6 grid gap-6 grid-cols-1 xl:grid-cols-2'>
+          {/* Left: Nomination textareas */}
+          <div className='flex flex-col gap-6'>
+            <div>
+              <Label htmlFor='nominee'>Who are you nominating?</Label>
+              <Textarea
+                id='nominee'
+                placeholder='Start typing a name or team...'
+                rows={4}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor='what-they-did'>What did they do?</Label>
+              <Textarea
+                id='what-they-did'
+                placeholder='Describe the moment, project, or behavior you want to celebrate.'
+                rows={4}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor='impact'>What was the impact?</Label>
+              <Textarea
+                id='impact'
+                placeholder='How did this help the team, customers, or the company?'
+                rows={4}
+              />
             </div>
           </div>
 
-          {/* File Input */}
-          <div className='rounded-xl border border-border md:p-6 p-4'>
-            <h5 className='card-title'>File Input</h5>
-            <Input type='file' className='mt-6' />
-          </div>
+          {/* Right: Badge selectors + toggles */}
+          <div className='flex flex-col gap-6'>
+            <div>
+              <Label htmlFor='star-badge' className='text-warning'>
+                Star of the day
+              </Label>
+              <Input
+                id='star-badge'
+                placeholder='Made today meaningfully better for others.'
+                variant={'warning'}
+                className='mt-2'
+              />
+            </div>
+            <div>
+              <Label htmlFor='focus-badge' className='text-info'>
+                Focus hero
+              </Label>
+              <Input
+                id='focus-badge'
+                placeholder='Protected deep work and shipped something important.'
+                variant={'info'}
+                className='mt-2'
+              />
+            </div>
+            <div>
+              <Label htmlFor='spark-badge' className='text-success'>
+                Team spark
+              </Label>
+              <Input
+                id='spark-badge'
+                placeholder='Connected people, helped morale, or unblocked collaboration.'
+                variant={'success'}
+                className='mt-2'
+              />
+            </div>
 
-          {/* Checkbox */}
-          <div className='rounded-xl border border-border md:p-6 p-4'>
-            <h5 className='card-title'>Checkbox</h5>
-            <div className='flex gap-6 mt-6'>
+            {/* Confirmation toggles */}
+            <div className='grid grid-cols-2 sm:grid-cols-3 gap-6'>
               <div className='flex items-center gap-2'>
-                <Checkbox id='default' />
-                <Label htmlFor='default'>Default</Label>
+                <Switch
+                  checked={switch5}
+                  onCheckedChange={setSwitch5}
+                />
+                <Label>Share in Hall of Fame</Label>
               </div>
               <div className='flex items-center gap-2'>
-                <Checkbox id='checked' defaultChecked />
-                <Label htmlFor='checked'>Checked</Label>
-              </div>
-              <div className='flex items-center gap-2'>
-                <Checkbox id='disabled' disabled />
-                <Label htmlFor='disabled'>Disabled</Label>
+                <Switch
+                  checked={switch6}
+                  onCheckedChange={setSwitch6}
+                />
+                <Label>Send a thank-you DM</Label>
               </div>
             </div>
-          </div>
 
-          {/* Radio */}
-          <div className='rounded-xl border border-border md:p-6 p-4'>
-            <h5 className='card-title'>Radio Buttons</h5>
-            <RadioGroup defaultValue='default' className='mt-6 flex gap-6'>
-              <div className='flex items-center gap-2'>
-                <RadioGroupItem value='default' id='default' />
-                <Label htmlFor='default'>Default</Label>
-              </div>
-              <div className='flex items-center gap-2'>
-                <RadioGroupItem value='selected' id='selected' />
-                <Label htmlFor='selected'>Selected</Label>
-              </div>
-              <div className='flex items-center gap-2'>
-                <RadioGroupItem value='disabled' id='disabled' disabled />
-                <Label htmlFor='disabled'>Disabled</Label>
-              </div>
-            </RadioGroup>
-          </div>
-
-          {/* Switch */}
-          <div className='rounded-xl border border-border md:p-6 p-4'>
-            <h5 className='card-title'>Toggle Switch</h5>
-            <div className='grid grid-cols-2 sm:grid-cols-3 gap-6 mt-6'>
-              <div className='flex items-center gap-2'>
-                <Switch checked={switch1} onCheckedChange={setSwitch1} />
-                <Label>Toggle me</Label>
-              </div>
-              <div className='flex items-center gap-2'>
-                <Switch checked={switch2} onCheckedChange={setSwitch2} />
-                <Label>Toggle me (checked)</Label>
-              </div>
-              <div className='flex items-center gap-2'>
-                <Switch disabled />
-                <Label>Disabled</Label>
-              </div>
-              <div className='flex items-center gap-2'>
-                <Switch checked disabled />
-                <Label>Disabled (checked)</Label>
-              </div>
-              <Switch checked={switch3} onCheckedChange={setSwitch3} />
+            {/* Button */}
+            <div className='flex gap-3'>
+              <Button>Send nomination</Button>
             </div>
           </div>
         </div>

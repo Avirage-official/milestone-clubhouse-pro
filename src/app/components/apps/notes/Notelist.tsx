@@ -2,17 +2,16 @@
 
 import { Icon } from "@iconify/react";
 import React, { useState, useEffect } from "react";
-import { NotesType } from "@/app/(DashboardLayout)/types/apps/notes";
+import { WorkNote, NoteContext } from "@/app/(DashboardLayout)/types/apps/notes";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 
 interface NotelistProps {
-  notes: NotesType[];
-  loading: boolean;
-  onSelectNote: (noteId: number) => void;
-  onDeleteNote: (noteId: number) => void;
+  notes: WorkNote[];
+  onSelectNote: (noteId: string) => void;
+  onDeleteNote: (noteId: string) => void;
 }
 
 // Map colors to Tailwind classes
@@ -24,9 +23,17 @@ const colorClassMap: Record<string, string> = {
   secondary: "bg-lightsecondary text-secondary",
 };
 
-const Notelist: React.FC<NotelistProps> = ({ notes, loading, onSelectNote, onDeleteNote }) => {
+const contextLabels: Record<NoteContext, string> = {
+  meeting: "Meeting",
+  "one-to-one": "1:1",
+  project: "Project",
+  idea: "Idea",
+  other: "Other",
+};
+
+const Notelist: React.FC<NotelistProps> = ({ notes, onSelectNote, onDeleteNote }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [activeNoteId, setActiveNoteId] = useState<number | null>(null);
+  const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
 
   useEffect(() => {
     if (notes.length > 0) {
@@ -35,18 +42,15 @@ const Notelist: React.FC<NotelistProps> = ({ notes, loading, onSelectNote, onDel
   }, [notes]);
 
   const filteredNotes = notes.filter((note) => {
-    if (note.deleted) return false;
     if (!note.title) return false;
     if (searchTerm === "") return true;
     return note.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  const handleNoteClick = (noteId: number) => {
+  const handleNoteClick = (noteId: string) => {
     setActiveNoteId(noteId);
     onSelectNote(noteId);
   };
-
-  if (loading) return <p>Loading notes...</p>;
 
   return (
     <div>
@@ -71,16 +75,24 @@ const Notelist: React.FC<NotelistProps> = ({ notes, loading, onSelectNote, onDel
                   onClick={() => handleNoteClick(note.id)}
                 >
                   <h6 className="text-base truncate">{note.title}</h6>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-ld">
-                      {note.datef ? new Date(note.datef).toLocaleDateString() : "-"}
-                    </p>
+                  <div className="flex items-center justify-between mt-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-medium uppercase opacity-70">
+                        {contextLabels[note.context]}
+                      </span>
+                      <span className="text-xs text-ld">
+                        {note.updatedAt ? new Date(note.updatedAt).toLocaleDateString() : "-"}
+                      </span>
+                    </div>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => onDeleteNote(note.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteNote(note.id);
+                          }}
                           aria-label="Delete note"
                         >
                           <Icon icon="tabler:trash" height={18} />

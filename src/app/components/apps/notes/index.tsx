@@ -5,8 +5,7 @@ import CardBox from '@/app/components/shared/CardBox'
 import NotesSidebar from '@/app/components/apps/notes/NotesSidebar'
 import NoteContent from '@/app/components/apps/notes/NoteContent'
 import { Icon } from '@iconify/react'
-import { usePathname } from 'next/navigation'
-import { NotesType } from '@/app/(DashboardLayout)/types/apps/notes'
+import { WorkNote, NoteContext } from '@/app/(DashboardLayout)/types/apps/notes'
 import AddNotes from './AddNotes'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
@@ -17,35 +16,56 @@ interface ColorType {
   lineColor?: string
 }
 
+const defaultNotes: WorkNote[] = [
+  {
+    id: '1',
+    title: 'Sprint Planning – Q3 Roadmap',
+    context: 'meeting',
+    body: 'Discussed priorities for next quarter. Agreed on three key workstreams.',
+    color: 'primary',
+    actionItems: [
+      { id: 'a1', text: 'Draft roadmap document', done: false },
+      { id: 'a2', text: 'Schedule follow-up with design', done: true },
+    ],
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '2',
+    title: '1:1 with Jamie',
+    context: 'one-to-one',
+    body: 'Talked about career growth and upcoming promotion cycle.',
+    color: 'warning',
+    actionItems: [
+      { id: 'a3', text: 'Share promotion rubric', done: false },
+    ],
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: '3',
+    title: 'Auth service migration',
+    context: 'project',
+    body: 'Need to move from legacy auth to OAuth 2.0 before end of month.',
+    color: 'error',
+    actionItems: [],
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
+  },
+  {
+    id: '4',
+    title: 'Idea – Internal CLI tool',
+    context: 'idea',
+    body: 'Build a CLI that scaffolds new microservices from a template.',
+    color: 'success',
+    actionItems: [],
+    updatedAt: new Date(Date.now() - 259200000).toISOString(),
+  },
+]
+
 const NotesApp = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [notes, setNotes] = useState<NotesType[]>([])
-  const [loading, setLoading] = useState(false)
-  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null)
-  const location = usePathname()
+  const [notes, setNotes] = useState<WorkNote[]>(defaultNotes)
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null)
 
   const handleClose = () => setIsOpen(false)
-
-  const fetchNotes = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch('/api/notes')
-      const data = await response.json()
-      setNotes(data?.data || [])
-    } catch (err) {
-      console.error('Failed to fetch notes:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleResetNotes = async () => {
-    await fetch('/api/notes', {
-      method: 'GET',
-      headers: { browserRefreshed: 'true' },
-    })
-    fetchNotes()
-  }
 
   const colorVariation: ColorType[] = [
     { id: 1, lineColor: 'warning', disp: 'warning' },
@@ -56,55 +76,34 @@ const NotesApp = () => {
   ]
 
   useEffect(() => {
-    const isPageRefreshed = sessionStorage.getItem('isPageRefreshed')
-    if (isPageRefreshed === 'true') {
-      sessionStorage.removeItem('isPageRefreshed')
-      handleResetNotes()
-    } else {
-      fetchNotes()
-    }
-  }, [location])
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      sessionStorage.setItem('isPageRefreshed', 'true')
-    }
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [])
-
-  const updateNote = (id: number, title: string, color: string) => {
-    setNotes(prev =>
-      prev.map(note => (note.id === id ? { ...note, title, color } : note))
-    )
-
-    fetch(`/api/notes/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, color }),
-    }).catch(err => console.error('Failed to update note:', err))
-  }
-
-  useEffect(() => {
     if (notes.length > 0 && selectedNoteId === null) {
       setSelectedNoteId(notes[0].id)
     }
   }, [notes, selectedNoteId])
 
-  const addNote = async (note: { title: string; color: string }) => {
-    try {
-      const response = await fetch('/api/notes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(note),
-      })
-      const result = await response.json()
-      const newNote: NotesType = result.data
-      setNotes(prev => [...prev, newNote])
-      setSelectedNoteId(newNote.id)
-    } catch (err) {
-      console.error('Failed to add note:', err)
+  const updateNote = (updatedNote: WorkNote) => {
+    setNotes(prev =>
+      prev.map(note => (note.id === updatedNote.id ? updatedNote : note))
+    )
+  }
+
+  const addNote = (note: { title: string; color: string; context: NoteContext }) => {
+    const newNote: WorkNote = {
+      id: crypto.randomUUID(),
+      title: note.title,
+      context: note.context,
+      body: '',
+      color: note.color,
+      actionItems: [],
+      updatedAt: new Date().toISOString(),
     }
+    setNotes(prev => [...prev, newNote])
+    setSelectedNoteId(newNote.id)
+  }
+
+  const deleteNote = (id: string) => {
+    setNotes(prev => prev.filter(n => n.id !== id))
+    if (selectedNoteId === id) setSelectedNoteId(null)
   }
 
   return (
@@ -119,24 +118,19 @@ const NotesApp = () => {
             >
               <NotesSidebar
                 notes={notes}
-                loading={loading}
-                onSelectNote={(id: number) => setSelectedNoteId(id)}
-                onDeleteNote={(id: number) => {
-                  setNotes(prev => prev.filter(n => n.id !== id))
-                  if (selectedNoteId === id) setSelectedNoteId(null)
+                onSelectNote={(id: string) => {
+                  setSelectedNoteId(id)
+                  handleClose()
                 }}
+                onDeleteNote={deleteNote}
               />
             </SheetContent>
           </Sheet>
           <div className='max-w-[320px] h-auto lg:block hidden'>
             <NotesSidebar
               notes={notes}
-              loading={loading}
-              onSelectNote={(id: number) => setSelectedNoteId(id)}
-              onDeleteNote={(id: number) => {
-                setNotes(prev => prev.filter(n => n.id !== id))
-                if (selectedNoteId === id) setSelectedNoteId(null)
-              }}
+              onSelectNote={(id: string) => setSelectedNoteId(id)}
+              onDeleteNote={deleteNote}
             />
           </div>
         </div>

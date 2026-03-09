@@ -40,7 +40,7 @@ const TopCards = () => {
     },
     {
       key: "card4",
-      title: "Tickets",
+      title: "Change Requests",
       desc: "8+",
       img: "/images/svgs/icon-mailbox.svg",
       bgcolor: "bg-secondary/10 dark:bg-secondary/10",

@@ -65,13 +65,15 @@ const CreateTicketForm = () => {
 
     const newTicket: TicketType = {
       Id: ticketId!,
-      ticketTitle,
-      ticketDescription,
-      Status: "Open",
-      Label: "primary",
-      thumb: agentPhoto,
-      AgentName: selectedAgent.name,
-      Date: new Date(ticketDate),
+      title: ticketTitle,
+      description: ticketDescription,
+      companyName: 'Unassigned',
+      requestType: 'other',
+      stage: 'new',
+      status: 'open',
+      assignedToAdmin: selectedAgent.name,
+      submittedBy: selectedAgent.name,
+      submittedAt: new Date(ticketDate).toISOString(),
       deleted: false,
     };
 

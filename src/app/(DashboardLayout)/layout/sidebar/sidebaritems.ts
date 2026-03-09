@@ -96,7 +96,7 @@ const SidebarContent: MenuItem[] = [
       },
       {
         id: uniqueId(),
-        name: 'Tickets',
+        name: 'Change Requests',
         icon: 'solar:ticker-star-linear',
         url: '/apps/tickets',
         isPro: false,

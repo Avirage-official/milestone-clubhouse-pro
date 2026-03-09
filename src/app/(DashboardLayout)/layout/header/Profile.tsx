@@ -32,7 +32,16 @@ const Profile = () => {
 
         <DropdownMenuContent
           align='end'
-          className='w-screen sm:w-[200px] pb-4 pt-2 rounded-sm'>
+          className='w-screen sm:w-[220px] pb-4 pt-2 rounded-sm'>
+          {/* Role badge */}
+          <div className='px-4 py-2'>
+            <p className='text-sm font-semibold text-foreground'>Mathew Anderson</p>
+            <span className='inline-block mt-1 text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full'>
+              Admin
+            </span>
+          </div>
+          <DropdownMenuSeparator className='my-1' />
+
           <SimpleBar>
             {profileData.profileDD.map((item, index) => (
               <DropdownMenuItem key={index} asChild>

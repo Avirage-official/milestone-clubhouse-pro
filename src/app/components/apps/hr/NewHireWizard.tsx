@@ -283,7 +283,7 @@ const NewHireWizard: React.FC<NewHireWizardProps> = ({
                   }
                 />
                 <Label htmlFor="showClubhouseIntro" className="font-normal">
-                  Show Clubhouse product intro
+                  Show Milestones product intro
                 </Label>
               </div>
               <div className="flex items-center gap-2">

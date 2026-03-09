@@ -21,17 +21,10 @@ const profileDD: ProfileType[] = [
   },
   {
     img: "/images/svgs/icon-inbox.svg",
-    title: "My Notes",
-    subtitle: "My Daily Notes",
-    icon: "tabler:mail",
+    title: "Work Notes",
+    subtitle: "My work notes",
+    icon: "tabler:notes",
     url: "/apps/notes",
-  },
-  {
-    img: "/images/svgs/icon-tasks.svg",
-    title: "My Blogs",
-    subtitle: "Stories, insights, and updates",
-    icon: "tabler:list-check",
-    url: "/apps/blog/post",
   },
 ];
 

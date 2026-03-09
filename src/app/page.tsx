@@ -1,9 +1,8 @@
 import Link from "next/link";
 
 /* ───────────────────────────────────────────
-   Milestone Clubhouse Pro — Marketing Landing
+   Milestones — Marketing Landing
    React Server Component · Tailwind CSS only
-   Superhuman-style design
    ─────────────────────────────────────────── */
 
 export default function LandingPage() {
@@ -34,7 +33,7 @@ export default function LandingPage() {
                 </svg>
               </div>
               <span className="text-lg font-bold tracking-tight text-white">
-                MILESTONE CLUBHOUSE
+                MILESTONES
               </span>
             </div>
 
@@ -73,10 +72,10 @@ export default function LandingPage() {
             {/* Mobile */}
             <div className="flex items-center gap-3 md:hidden">
               <Link
-                href="/auth/register"
+                href="/auth/login?demo=1"
                 className="rounded-full border border-white/40 bg-white/10 px-5 py-2 text-sm font-semibold text-white"
               >
-                Sign up
+                Launch demo
               </Link>
             </div>
           </nav>
@@ -85,22 +84,19 @@ export default function LandingPage() {
         {/* ── Hero body — centered text ───────────── */}
         <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-6 pt-12 pb-0 text-center lg:pt-16">
           <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
-            Bring the workday
-            <br />
-            back to life
+            Milestones
           </h1>
 
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl">
-            Turn focus, breaks, and bonding into a daily game
-            that works in every app and tab
+            Light HR, approvals, and work notes for growing teams.
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
             <Link
-              href="/onboarding"
+              href="/auth/login?demo=1"
               className="group inline-flex items-center gap-3 rounded-full bg-[#2d2455] px-7 py-3.5 text-base font-semibold text-white shadow-xl shadow-[#2d2455]/30 transition hover:bg-[#3b3070] hover:shadow-2xl hover:shadow-[#5d87ff]/20"
             >
-              Try the demo
+              Launch demo workspace
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5d87ff] transition-transform group-hover:translate-x-0.5">
                 <svg className="h-4 w-4 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -280,32 +276,30 @@ export default function LandingPage() {
           {/* Solution */}
           <div>
             <h2 className="text-3xl font-bold leading-snug">
-              Clubhouse turns your culture into a daily habit.
+              Milestones turns your culture into a daily habit.
             </h2>
             <p className="mt-4 text-gray-400 leading-relaxed">
-              Instead of another app to ignore, Clubhouse becomes the place
-              employees start their day: one mission screen, micro‑games, and
-              gentle nudges that make good habits feel rewarding.
+              Instead of another app to ignore, Milestones becomes the place
+              employees start their day: light HR, approvals, and work notes
+              that make growing teams feel organized.
             </p>
             <ul className="mt-6 space-y-3 text-gray-300">
               <li className="flex items-start gap-2">
                 <BulletIcon className="mt-1 text-[#13deb9]" />
                 <span>
-                  Daily &lsquo;mission screen&rsquo; that aligns focus, breaks, and
-                  rituals.
+                  Approvals and change requests in one place.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <BulletIcon className="mt-1 text-[#13deb9]" />
                 <span>
-                  Micro‑games, quests, and streaks that make progress feel fun.
+                  HR onboarding, invites, and people overview built in.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <BulletIcon className="mt-1 text-[#13deb9]" />
                 <span>
-                  Live ranks and Hall of Fame that celebrate healthy behaviors,
-                  not burnout.
+                  Work notes and blogs to keep your team aligned.
                 </span>
               </li>
             </ul>
@@ -318,21 +312,21 @@ export default function LandingPage() {
         <div className="mx-auto max-w-3xl">
           <h2 className="text-3xl font-bold">What leaders start to notice.</h2>
           <p className="mt-3 text-gray-400">
-            Teams using Clubhouse Pro report:
+            Teams using Milestones report:
           </p>
 
           <div className="mt-10 grid gap-8 sm:grid-cols-3">
-            <BenefitCard text="More protected deep‑work blocks." />
-            <BenefitCard text="More real 1:1 lunches and social moments." />
-            <BenefitCard text="Higher participation in wellness initiatives — without more meetings." />
+            <BenefitCard text="Faster approvals and change requests." />
+            <BenefitCard text="Smoother onboarding for new hires." />
+            <BenefitCard text="Better visibility across teams and managers." />
           </div>
 
           <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5">
             <Link
-              href="/onboarding"
+              href="/auth/login?demo=1"
               className="group inline-flex items-center gap-3 rounded-full bg-[#5d87ff] px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-[#5d87ff]/25 transition hover:bg-[#4a72e8] hover:shadow-xl hover:shadow-[#5d87ff]/30"
             >
-              Start the onboarding demo
+              Launch demo workspace
               <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>

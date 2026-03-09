@@ -102,6 +102,13 @@ const SidebarContent: MenuItem[] = [
         isPro: false,
       },
       {
+        id: uniqueId(),
+        name: 'HR',
+        icon: 'solar:users-group-two-rounded-linear',
+        url: '/apps/hr',
+        isPro: false,
+      },
+      {
         name: 'Blogs',
         id: uniqueId(),
         icon: 'solar:sort-by-alphabet-linear',

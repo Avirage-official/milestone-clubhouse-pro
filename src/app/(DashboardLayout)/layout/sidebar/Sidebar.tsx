@@ -137,8 +137,6 @@ const SidebarLayout = ({ onClose }: { onClose?: () => void }) => {
               )}
             </div>
           ))}
-
-
         </div>
       </SimpleBar>
     </AMSidebar>

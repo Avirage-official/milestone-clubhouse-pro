@@ -61,7 +61,7 @@ const PERSONALITIES = [
   },
 ];
 
-/* simulated-day bar percentages (unused – kept for future workday step) */
+/* simulated-day bar percentages */
 
 /* ─── main page ─── */
 
@@ -225,7 +225,7 @@ function WelcomeStep({ onContinue }: { onContinue: () => void }) {
             <span className="text-2xl">🏢</span>
             <h3 className="font-semibold text-sm">Your company</h3>
             <p className="text-xs text-muted-foreground">
-              Milestone Ltd — building tools for growing teams since 2023.
+              Milestones Ltd — building tools for growing teams since 2023.
             </p>
           </div>
           <div className="rounded-xl border border-border/50 bg-muted/30 p-5 space-y-2">

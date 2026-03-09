@@ -6,214 +6,227 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+// ─── New HR / multi-tenant enums ────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  HR
+  MANAGER
+  EMPLOYEE
+  CEO
+}
+
+enum WorkPattern {
+  OFFICE
+  REMOTE
+  HYBRID
+}
+
+enum ContractType {
+  FULL_TIME
+  PART_TIME
+  CONTRACTOR
+}
+
+enum TicketStage {
+  NEW
+  MANAGER_REVIEW
+  CEO_REVIEW
+  COMPLETED
+  REJECTED
+}
+
+enum TicketStatus {
+  OPEN
+  ON_HOLD
+  CLOSED
+}
+
+enum RequestType {
+  ORG_CHANGE
+  POLICY_CHANGE
+  ACCESS_REQUEST
+  OTHER
+}
+
+enum OnboardingStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+// ─── Core entities ──────────────────────────────────────────────────
+
+model Company {
+  id        Int      @id @default(autoincrement())
   name      String
+  domain    String   @unique // e.g. acme.com
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relationships
-  profile       Profile?
-  stats         UserStats?
-  teams         UserTeam[]
-  primaryTeamId String?
-  primaryTeam   Team?      @relation("PrimaryTeam", fields: [primaryTeamId], references: [id])
-
-  // Activity
-  workSessions         WorkSession[]
-  breakEvents          BreakEvent[]
-  quests               QuestLog[]
-  recognitionsGiven    Recognition[]  @relation("RecognitionFrom")
-  recognitionsReceived Recognition[]  @relation("RecognitionTo")
-  songsOfTheDay        SongOfTheDay[]
-  dailyTasks           DailyTask[]
-  dailyChecks          DailyCheck[]
+  teams   Team[]
+  users   User[]
+  tickets Ticket[]
+  invites Invite[]
 }
 
 model Team {
-  id        String   @id @default(cuid())
+  id        Int     @id @default(autoincrement())
   name      String
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id])
+  managerId Int?
+  manager   User?   @relation("ManagedTeams", fields: [managerId], references: [id])
+
+  members UserTeam[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  fullName  String
+  role      UserRole @default(EMPLOYEE)
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id])
+
+  // relationships
+  profile         Profile?
+  teams           UserTeam[]
+  managedTeams    Team[]     @relation("ManagedTeams")
+  tickets         Ticket[]   @relation("TicketSubmittedBy")
+  assignedTickets Ticket[]   @relation("TicketAssignedToAdmin")
+  subjectTickets  Ticket[]   @relation("TicketSubjectUser")
+  notes           WorkNote[]
+  invites         Invite[]
+
+  // HR / lifecycle
+  onboardingStatus OnboardingStatus? @default(PENDING)
+  startDate        DateTime?
+  contractType     ContractType?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
 
-  // Members
-  members      UserTeam[]
-  primaryUsers User[]     @relation("PrimaryTeam")
+model Profile {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
 
-  // For metrics later
-  workSessions WorkSession[]
-  breakEvents  BreakEvent[]
-  quests       QuestLog[]
+  preferredName String?
+  roleTitle     String?
+  location      String?
+  timeZone      String?
+  workPattern   WorkPattern?
+
+  // Fun / product-specific fields
+  petName          String?
+  petType          String?
+  petPersonality   String?
+  workdayFocus     String?
+  breakPreference  String?
+  socialPreference String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserTeam {
-  userId String
-  teamId String
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  teamId    Int
+  isPrimary Boolean @default(false)
 
   user User @relation(fields: [userId], references: [id])
   team Team @relation(fields: [teamId], references: [id])
 
-  @@id([userId, teamId])
+  @@unique([userId, teamId])
 }
 
-model Profile {
-  id               String              @id @default(cuid())
-  userId           String              @unique
-  timezone         String
-  roleTitle        String?
-  workStyle        WorkStylePreference
-  breakPreference  BreakPreference
-  socialPreference SocialPreference
+// ─── Tickets (change requests) ──────────────────────────────────────
 
-  // Pet
-  petName          String?
-  petTypeId        String?
-  petPersonalityId String?
-  petMood          PetMood @default(HAPPY)
-
-  // Song / status
-  songOfTheDayUrl String?
-  clubhouseStatus ClubhouseStatus @default(IN_CLUBHOUSE)
-
-  user           User            @relation(fields: [userId], references: [id])
-  petType        PetType?        @relation(fields: [petTypeId], references: [id])
-  petPersonality PetPersonality? @relation(fields: [petPersonalityId], references: [id])
-}
-
-model PetType {
-  id       String    @id @default(cuid())
-  name     String    @unique // e.g. Dog, Fox, Robot, Dragon
-  profiles Profile[]
-}
-
-model PetPersonality {
-  id       String    @id @default(cuid())
-  name     String    @unique // Chill, Energetic, Motivator
-  profiles Profile[]
-}
-
-model UserStats {
-  id           String @id @default(cuid())
-  userId       String @unique
-  totalXp      Int    @default(0)
-  focusStreak  Int    @default(0)
-  breakStreak  Int    @default(0)
-  socialStreak Int    @default(0)
-  level        Int    @default(1)
-  rank         Rank   @default(CADET)
-
-  user User @relation(fields: [userId], references: [id])
-}
-
-model DailyTask {
-  id          String     @id @default(cuid())
-  userId      String
+model Ticket {
+  id          Int     @id @default(autoincrement())
   title       String
-  description String?
-  date        DateTime // which day this task belongs to
-  source      TaskSource // TODAY / FROM_YESTERDAY / REPEAT
-  status      TaskStatus @default(OPEN)
+  description String
+  companyId   Int
+  company     Company @relation(fields: [companyId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
+  requestType RequestType
+  stage       TicketStage  @default(NEW)
+  status      TicketStatus @default(OPEN)
 
-  @@index([userId, date])
+  // who this request is about (optional)
+  subjectUserId Int?
+  subjectUser   User? @relation("TicketSubjectUser", fields: [subjectUserId], references: [id])
+
+  // submitted by which employee
+  submittedById Int?
+  submittedBy   User? @relation("TicketSubmittedBy", fields: [submittedById], references: [id])
+
+  // which admin on our side owns it
+  assignedToAdminId Int?
+  assignedToAdmin   User? @relation("TicketAssignedToAdmin", fields: [assignedToAdminId], references: [id])
+
+  managerName String?
+  ceoName     String?
+
+  submittedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-model DailyCheck {
-  id              String    @id @default(cuid())
-  userId          String
-  label           String
-  order           Int
-  isActive        Boolean   @default(true) // whether this check is in their routine
-  lastCompletedAt DateTime? // for future stats
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+// ─── HR invites (new hire flow) ─────────────────────────────────────
 
-  user User @relation(fields: [userId], references: [id])
+model Invite {
+  id            Int     @id @default(autoincrement())
+  email         String
+  fullName      String
+  preferredName String?
+  companyId     Int
+  company       Company @relation(fields: [companyId], references: [id])
+
+  roleTitle       String
+  primaryTeamName String
+  managerName     String
+  startDate       DateTime?
+  contractType    ContractType?
+
+  location    String?
+  timeZone    String?
+  workPattern WorkPattern?
+
+  showCompanyIntro   Boolean @default(true)
+  showClubhouseIntro Boolean @default(true)
+  requirePolicies    Boolean @default(true)
+
+  onboardingStatus OnboardingStatus @default(PENDING)
+
+  magicToken  String?   @unique
+  invitedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  // Optional link to user once created
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id])
 }
 
-model WorkSession {
-  id        String            @id @default(cuid())
-  userId    String
-  teamId    String?
-  startedAt DateTime
-  endedAt   DateTime?
-  origin    WorkSessionOrigin // e.g. HOME_HUB, PLAYGROUND
-  createdAt DateTime          @default(now())
+// ─── Work notes (for Notes page) ────────────────────────────────────
 
-  user User  @relation(fields: [userId], references: [id])
-  team Team? @relation(fields: [teamId], references: [id])
+model WorkNote {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
-  @@index([userId, startedAt])
+  title   String
+  context String // 'meeting' | 'one-to-one' | 'project' | 'idea' | ...
+  body    String
+  color   String // category color
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model BreakEvent {
-  id           String    @id @default(cuid())
-  userId       String
-  teamId       String?
-  startedAt    DateTime
-  endedAt      DateTime?
-  breakType    BreakType
-  qualityScore Int? // e.g. 1–5 rating later
-  createdAt    DateTime  @default(now())
-
-  user User  @relation(fields: [userId], references: [id])
-  team Team? @relation(fields: [teamId], references: [id])
-
-  @@index([userId, startedAt])
-}
-
-model Quest {
-  id          String        @id @default(cuid())
-  title       String
-  description String?
-  category    QuestCategory
-  xpReward    Int           @default(50)
-  isActive    Boolean       @default(true)
-
-  logs QuestLog[]
-}
-
-model QuestLog {
-  id          String      @id @default(cuid())
-  questId     String
-  userId      String
-  completedAt DateTime
-  source      QuestSource // e.g. HOME_HUB, PLAYGROUND
-
-  quest  Quest   @relation(fields: [questId], references: [id])
-  user   User    @relation(fields: [userId], references: [id])
-  team   Team?   @relation(fields: [teamId], references: [id])
-  teamId String?
-
-  @@index([userId, completedAt])
-}
-
-model Recognition {
-  id         String    @id @default(cuid())
-  fromUserId String
-  toUserId   String
-  badge      BadgeType
-  reason     String?
-  createdAt  DateTime  @default(now())
-
-  fromUser User @relation("RecognitionFrom", fields: [fromUserId], references: [id])
-  toUser   User @relation("RecognitionTo", fields: [toUserId], references: [id])
-}
-
-model SongOfTheDay {
-  id     String   @id @default(cuid())
-  userId String
-  date   DateTime
-  url    String
-  title  String?
-  artist String?
-
-  user User @relation(fields: [userId], references: [id])
-
-  @@unique([userId, date])
-}
+// ─── Legacy enums (still used by clubhouseData.ts mock data) ────────
 
 enum WorkStylePreference {
   DEEP_FOCUS
@@ -293,43 +306,4 @@ enum BadgeType {
   FOCUS_HERO
   TEAM_SPARK
   WELLNESS_CHAMP
-}
-
-enum TicketStage {
-  NEW
-  MANAGER_REVIEW
-  CEO_REVIEW
-  COMPLETED
-  REJECTED
-}
-
-enum TicketStatus {
-  OPEN
-  ON_HOLD
-  CLOSED
-}
-
-enum RequestType {
-  ORG_CHANGE
-  POLICY_CHANGE
-  ACCESS_REQUEST
-  OTHER
-}
-
-model Ticket {
-  id              Int          @id @default(autoincrement())
-  title           String
-  description     String
-  companyName     String
-  requestType     RequestType
-  stage           TicketStage  @default(NEW)
-  status          TicketStatus @default(OPEN)
-
-  assignedToAdmin String
-  submittedBy     String
-  managerName     String?
-  ceoName         String?
-
-  submittedAt     DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
 }

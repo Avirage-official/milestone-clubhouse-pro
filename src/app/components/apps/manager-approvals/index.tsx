@@ -100,17 +100,13 @@ const ManagerApprovalsPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, ...updates }),
       });
+
+      setTickets((prev) =>
+        prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
+      );
     } catch (err) {
       console.error("Error updating ticket:", err);
     }
-
-    setTickets((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? { ...t, ...updates, updatedAt: new Date().toISOString() }
-          : t
-      )
-    );
   };
 
   // Approve handler
@@ -132,19 +128,21 @@ const ManagerApprovalsPage = () => {
   };
 
   // Reject handler
-  const handleReject = async (ticket: Ticket, _reason: string) => {
+  const handleReject = async (ticket: Ticket, reason: string) => {
     await updateTicket(ticket.id, {
       stage: "REJECTED",
       status: "CLOSED",
+      ...(reason ? { description: `${ticket.description}\n\nRejection reason: ${reason}` } : {}),
     });
     showToast("Request rejected");
     closePanel();
   };
 
   // Request changes handler
-  const handleRequestChanges = async (ticket: Ticket, _comment: string) => {
+  const handleRequestChanges = async (ticket: Ticket, comment: string) => {
     await updateTicket(ticket.id, {
       status: "ON_HOLD",
+      ...(comment ? { description: `${ticket.description}\n\nComment to admin: ${comment}` } : {}),
     });
     showToast("Changes requested — ticket is on hold");
     closePanel();

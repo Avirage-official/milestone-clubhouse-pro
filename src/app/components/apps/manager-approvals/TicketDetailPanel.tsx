@@ -14,6 +14,12 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
+import {
+  requestTypeLabelMap,
+  stageLabelMap,
+  stageBadgeVariant,
+  stageTimeline,
+} from "./ticketConstants";
 
 interface TicketDetailPanelProps {
   ticket: Ticket | null;
@@ -24,46 +30,6 @@ interface TicketDetailPanelProps {
   onReject: (ticket: Ticket, reason: string) => void;
   onRequestChanges: (ticket: Ticket, comment: string) => void;
 }
-
-const requestTypeLabelMap: Record<string, string> = {
-  ORG_CHANGE: "Org change",
-  POLICY_CHANGE: "Policy change",
-  ACCESS_REQUEST: "Access request",
-  OTHER: "Other",
-};
-
-const stageLabelMap: Record<string, string> = {
-  NEW: "New",
-  MANAGER_REVIEW: "Manager review",
-  CEO_REVIEW: "CEO review",
-  COMPLETED: "Completed",
-  REJECTED: "Rejected",
-};
-
-const stageBadgeVariant = (stage: string) => {
-  switch (stage) {
-    case "NEW":
-      return "lightPrimary";
-    case "MANAGER_REVIEW":
-      return "lightWarning";
-    case "CEO_REVIEW":
-      return "lightSuccess";
-    case "COMPLETED":
-      return "lightSuccess";
-    case "REJECTED":
-      return "lightError";
-    default:
-      return "default";
-  }
-};
-
-const stageTimeline: Record<string, string[]> = {
-  NEW: ["New"],
-  MANAGER_REVIEW: ["New", "Manager review"],
-  CEO_REVIEW: ["New", "Manager review", "CEO review"],
-  COMPLETED: ["New", "Manager review", "CEO review", "Completed"],
-  REJECTED: ["New", "Rejected"],
-};
 
 const TicketDetailPanel: React.FC<TicketDetailPanelProps> = ({
   ticket,

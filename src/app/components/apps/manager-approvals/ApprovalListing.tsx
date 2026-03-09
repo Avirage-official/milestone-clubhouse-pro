@@ -12,62 +12,18 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  requestTypeLabelMap,
+  stageLabelMap,
+  stageBadgeVariant,
+  statusBadgeVariant,
+  statusLabelMap,
+} from "./ticketConstants";
 
 interface ApprovalListingProps {
   tickets: Ticket[];
   onReview: (ticket: Ticket) => void;
 }
-
-const requestTypeLabelMap: Record<string, string> = {
-  ORG_CHANGE: "Org change",
-  POLICY_CHANGE: "Policy change",
-  ACCESS_REQUEST: "Access request",
-  OTHER: "Other",
-};
-
-const stageLabelMap: Record<string, string> = {
-  NEW: "New",
-  MANAGER_REVIEW: "Manager review",
-  CEO_REVIEW: "CEO review",
-  COMPLETED: "Completed",
-  REJECTED: "Rejected",
-};
-
-const stageBadgeVariant = (stage: string) => {
-  switch (stage) {
-    case "NEW":
-      return "lightPrimary";
-    case "MANAGER_REVIEW":
-      return "lightWarning";
-    case "CEO_REVIEW":
-      return "lightSuccess";
-    case "COMPLETED":
-      return "lightSuccess";
-    case "REJECTED":
-      return "lightError";
-    default:
-      return "default";
-  }
-};
-
-const statusBadgeVariant = (status: string) => {
-  switch (status) {
-    case "OPEN":
-      return "lightSuccess";
-    case "ON_HOLD":
-      return "lightWarning";
-    case "CLOSED":
-      return "lightError";
-    default:
-      return "default";
-  }
-};
-
-const statusLabelMap: Record<string, string> = {
-  OPEN: "Open",
-  ON_HOLD: "On Hold",
-  CLOSED: "Closed",
-};
 
 const ApprovalListing: React.FC<ApprovalListingProps> = ({
   tickets,

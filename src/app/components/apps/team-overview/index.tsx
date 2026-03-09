@@ -184,7 +184,7 @@ const TeamOverviewInner: React.FC<InnerProps> = ({ members, isHR }) => {
         <p className="text-sm text-muted-foreground mb-6">
           {isHR
             ? "See employees across teams, locations, and work patterns."
-            : "See your team\u2019s key details, locations, and open requests."}
+            : "See your team's key details, locations, and open requests."}
         </p>
 
         {/* ---- Stats row ---- */}

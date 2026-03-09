@@ -365,7 +365,7 @@ const Page = () => {
 
       {/* Card 3 – Recognition & nominations (bottom section) */}
       <div className='mt-6 rounded-xl border border-border md:p-6 p-4'>
-        <h5 className='card-title'>Recognition &amp; nominations</h5>
+        <h5 className='card-title'>Recognition & nominations</h5>
         <p className='text-sm text-muted-foreground mt-1'>
           Nominate teammates for badges like Star of the day, Focus hero, or
           Team spark.
@@ -451,7 +451,7 @@ const Page = () => {
                   checked={switch6}
                   onCheckedChange={setSwitch6}
                 />
-                <Label>Send a thank‑you DM</Label>
+                <Label>Send a thank-you DM</Label>
               </div>
             </div>
 

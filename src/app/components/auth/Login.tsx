@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import FullLogo from '@/app/(DashboardLayout)/layout/shared/logo/FullLogo'
 import CardBox from '../shared/CardBox'
 import Link from 'next/link'
@@ -9,6 +11,26 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 export const Login = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const isDemo = searchParams.get('demo') === '1'
+
+  const [username, setUsername] = useState(isDemo ? 'admin@demo.com' : '')
+  const [password, setPassword] = useState(isDemo ? 'password' : '')
+
+  useEffect(() => {
+    if (isDemo) {
+      const timer = setTimeout(() => {
+        router.push('/dashboard')
+      }, 1500)
+      return () => clearTimeout(timer)
+    }
+  }, [isDemo, router])
+
+  const handleSignIn = () => {
+    router.push('/dashboard')
+  }
+
   return (
     <>
       <div className='h-screen w-full flex justify-center items-center bg-lightprimary'>
@@ -18,8 +40,15 @@ export const Login = () => {
               <FullLogo />
             </div>
             <p className='text-sm text-muted-foreground text-center mb-6'>
-              Welcome to Tailwind-Admin
+              Welcome to Milestones
             </p>
+            {isDemo && (
+              <div className='mb-4 rounded-lg bg-primary/10 border border-primary/20 p-3 text-center'>
+                <p className='text-sm text-primary font-medium'>
+                  Demo credentials loaded — signing you in…
+                </p>
+              </div>
+            )}
             <div>
               <div className='mb-2 block'>
                 <Label htmlFor='username1' className='font-medium'>
@@ -30,6 +59,8 @@ export const Login = () => {
                 id='username1'
                 type='text'
                 placeholder='Enter your username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
@@ -43,6 +74,8 @@ export const Login = () => {
                 id='password1'
                 type='password'
                 placeholder='Enter your password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
@@ -61,12 +94,12 @@ export const Login = () => {
                 Forgot Password ?
               </Link>
             </div>
-            <Button className='w-full' asChild>
-              <Link href='/'>Sign In</Link>
+            <Button className='w-full' onClick={handleSignIn}>
+              Sign In
             </Button>
             <div className='flex items center gap-2 justify-center mt-6 flex-wrap'>
               <p className='text-base font-medium text-muted-foreground'>
-                New to TailwindAdmin?
+                New to Milestones?
               </p>
               <Link
                 href='/auth/register'

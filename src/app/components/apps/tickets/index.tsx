@@ -43,6 +43,11 @@ const TicketsApp = () => {
     setTicketSearch(text);
   };  
 
+  const viewDetails = (id: number) => {
+    // Placeholder for future detail view / modal
+    console.log("View details for request:", id);
+  };
+
   return (
     <CardBox>
       <TicketFilter tickets={tickets} setFilter={setFilter} />
@@ -51,6 +56,7 @@ const TicketsApp = () => {
         filter={filter}
         ticketSearch={ticketSearch}
         deleteTicket={deleteTicket}
+        onViewDetails={viewDetails}
         searchTickets={searchTickets}
       />
     </CardBox>

@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 interface TicketListingProps {
   tickets: TicketType[];
   deleteTicket: (id: number) => void;
+  onViewDetails: (id: number) => void;
   searchTickets: (term: string) => void;
   ticketSearch: string;
   filter: string;
@@ -77,6 +78,7 @@ const statusLabelMap: Record<string, string> = {
 const TicketListing: React.FC<TicketListingProps> = ({
   tickets,
   deleteTicket,
+  onViewDetails,
   searchTickets,
   ticketSearch,
   filter,
@@ -173,6 +175,7 @@ const TicketListing: React.FC<TicketListingProps> = ({
                           variant="ghost"
                           size="icon"
                           className="hover:text-primary"
+                          onClick={() => onViewDetails(ticket.Id)}
                         >
                           <Icon icon="tabler:eye" height="18" />
                         </Button>

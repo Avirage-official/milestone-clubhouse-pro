@@ -29,17 +29,17 @@ const TicketFilter: React.FC<TicketFilterProps> = ({ tickets, setFilter }) => {
       </div>
 
       <div
-        className='lg:col-span-3 md:col-span-6 col-span-12 p-30 bg-lightsuccess text-center rounded-md cursor-pointer'
+        className='lg:col-span-3 md:col-span-6 col-span-12 p-30 bg-lighterror text-center rounded-md cursor-pointer'
         onClick={() => setFilter('ceo_review')}>
-        <h3 className='text-success text-2xl'>{ceoC}</h3>
-        <h6 className='text-base text-success'>Waiting on CEO</h6>
+        <h3 className='text-error text-2xl'>{ceoC}</h3>
+        <h6 className='text-base text-error'>Waiting on CEO</h6>
       </div>
 
       <div
-        className='lg:col-span-3 md:col-span-6 col-span-12 p-30 bg-lighterror text-center rounded-md cursor-pointer'
+        className='lg:col-span-3 md:col-span-6 col-span-12 p-30 bg-lightsuccess text-center rounded-md cursor-pointer'
         onClick={() => setFilter('completed')}>
-        <h3 className='text-error text-2xl'>{completedC}</h3>
-        <h6 className='text-base text-error'>Completed This Month</h6>
+        <h3 className='text-success text-2xl'>{completedC}</h3>
+        <h6 className='text-base text-success'>Completed This Month</h6>
       </div>
     </div>
   )

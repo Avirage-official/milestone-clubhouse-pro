@@ -20,6 +20,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 // Toggle this flag to show/hide the manager-only "Teams & access" card
 const isManager = true
+const TEAM_SAVE_NOTIFICATION_DURATION_MS = 2000
 
 const DEMO_TEAMS = [
   { name: 'Product', description: 'Core team' },
@@ -120,7 +121,7 @@ const UserProfile = () => {
   const handleSaveTeams = () => {
     console.log('Saved team membership:', { selectedTeams, primaryTeam })
     setTeamSaved(true)
-    setTimeout(() => setTeamSaved(false), 2000)
+    setTimeout(() => setTeamSaved(false), TEAM_SAVE_NOTIFICATION_DURATION_MS)
   }
 
   const socialLinks = [
@@ -258,10 +259,6 @@ const UserProfile = () => {
               <div>
                 <p className='text-xs text-gray-500'>Pet personality</p>
                 <p>{preferences.petPersonality}</p>
-              </div>
-              <div>
-                <p className='text-xs text-gray-500'></p>
-                <p></p>
               </div>
               <div>
                 <p className='text-xs text-gray-500'>Notification tone</p>

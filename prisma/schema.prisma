@@ -1,0 +1,296 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  profile       Profile?
+  stats         UserStats?
+  teams         UserTeam[]
+  primaryTeamId String?
+  primaryTeam   Team?      @relation("PrimaryTeam", fields: [primaryTeamId], references: [id])
+
+  // Activity
+  workSessions         WorkSession[]
+  breakEvents          BreakEvent[]
+  quests               QuestLog[]
+  recognitionsGiven    Recognition[]  @relation("RecognitionFrom")
+  recognitionsReceived Recognition[]  @relation("RecognitionTo")
+  songsOfTheDay        SongOfTheDay[]
+  dailyTasks           DailyTask[]
+  dailyChecks          DailyCheck[]
+}
+
+model Team {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Members
+  members      UserTeam[]
+  primaryUsers User[]     @relation("PrimaryTeam")
+
+  // For metrics later
+  workSessions WorkSession[]
+  breakEvents  BreakEvent[]
+  quests       QuestLog[]
+}
+
+model UserTeam {
+  userId String
+  teamId String
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@id([userId, teamId])
+}
+
+model Profile {
+  id               String              @id @default(cuid())
+  userId           String              @unique
+  timezone         String
+  roleTitle        String?
+  workStyle        WorkStylePreference
+  breakPreference  BreakPreference
+  socialPreference SocialPreference
+
+  // Pet
+  petName          String?
+  petTypeId        String?
+  petPersonalityId String?
+  petMood          PetMood @default(HAPPY)
+
+  // Song / status
+  songOfTheDayUrl String?
+  clubhouseStatus ClubhouseStatus @default(IN_CLUBHOUSE)
+
+  user           User            @relation(fields: [userId], references: [id])
+  petType        PetType?        @relation(fields: [petTypeId], references: [id])
+  petPersonality PetPersonality? @relation(fields: [petPersonalityId], references: [id])
+}
+
+model PetType {
+  id       String    @id @default(cuid())
+  name     String    @unique // e.g. Dog, Fox, Robot, Dragon
+  profiles Profile[]
+}
+
+model PetPersonality {
+  id       String    @id @default(cuid())
+  name     String    @unique // Chill, Energetic, Motivator
+  profiles Profile[]
+}
+
+model UserStats {
+  id           String @id @default(cuid())
+  userId       String @unique
+  totalXp      Int    @default(0)
+  focusStreak  Int    @default(0)
+  breakStreak  Int    @default(0)
+  socialStreak Int    @default(0)
+  level        Int    @default(1)
+  rank         Rank   @default(CADET)
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model DailyTask {
+  id          String     @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  date        DateTime // which day this task belongs to
+  source      TaskSource // TODAY / FROM_YESTERDAY / REPEAT
+  status      TaskStatus @default(OPEN)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, date])
+}
+
+model DailyCheck {
+  id              String    @id @default(cuid())
+  userId          String
+  label           String
+  order           Int
+  isActive        Boolean   @default(true) // whether this check is in their routine
+  lastCompletedAt DateTime? // for future stats
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model WorkSession {
+  id        String            @id @default(cuid())
+  userId    String
+  teamId    String?
+  startedAt DateTime
+  endedAt   DateTime?
+  origin    WorkSessionOrigin // e.g. HOME_HUB, PLAYGROUND
+  createdAt DateTime          @default(now())
+
+  user User  @relation(fields: [userId], references: [id])
+  team Team? @relation(fields: [teamId], references: [id])
+
+  @@index([userId, startedAt])
+}
+
+model BreakEvent {
+  id           String    @id @default(cuid())
+  userId       String
+  teamId       String?
+  startedAt    DateTime
+  endedAt      DateTime?
+  breakType    BreakType
+  qualityScore Int? // e.g. 1–5 rating later
+  createdAt    DateTime  @default(now())
+
+  user User  @relation(fields: [userId], references: [id])
+  team Team? @relation(fields: [teamId], references: [id])
+
+  @@index([userId, startedAt])
+}
+
+model Quest {
+  id          String        @id @default(cuid())
+  title       String
+  description String?
+  category    QuestCategory
+  xpReward    Int           @default(50)
+  isActive    Boolean       @default(true)
+
+  logs QuestLog[]
+}
+
+model QuestLog {
+  id          String      @id @default(cuid())
+  questId     String
+  userId      String
+  completedAt DateTime
+  source      QuestSource // e.g. HOME_HUB, PLAYGROUND
+
+  quest  Quest   @relation(fields: [questId], references: [id])
+  user   User    @relation(fields: [userId], references: [id])
+  team   Team?   @relation(fields: [teamId], references: [id])
+  teamId String?
+
+  @@index([userId, completedAt])
+}
+
+model Recognition {
+  id         String    @id @default(cuid())
+  fromUserId String
+  toUserId   String
+  badge      BadgeType
+  reason     String?
+  createdAt  DateTime  @default(now())
+
+  fromUser User @relation("RecognitionFrom", fields: [fromUserId], references: [id])
+  toUser   User @relation("RecognitionTo", fields: [toUserId], references: [id])
+}
+
+model SongOfTheDay {
+  id     String   @id @default(cuid())
+  userId String
+  date   DateTime
+  url    String
+  title  String?
+  artist String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+}
+
+enum WorkStylePreference {
+  DEEP_FOCUS
+  BALANCED
+  SOCIAL
+}
+
+enum BreakPreference {
+  LIGHT
+  STANDARD
+  FREQUENT
+}
+
+enum SocialPreference {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum PetMood {
+  HAPPY
+  NEUTRAL
+  NEEDS_ATTENTION
+}
+
+enum ClubhouseStatus {
+  IN_CLUBHOUSE // online/active
+  DEEP_FOCUS
+  ON_BREAK
+  OUT_TODAY
+}
+
+enum Rank {
+  CADET
+  SERGEANT
+  CAPTAIN
+  GENERAL
+}
+
+enum TaskSource {
+  TODAY
+  FROM_YESTERDAY
+  REPEAT
+}
+
+enum TaskStatus {
+  OPEN
+  DONE
+  ARCHIVED
+}
+
+enum WorkSessionOrigin {
+  HOME_HUB
+  PLAYGROUND
+  OTHER
+}
+
+enum BreakType {
+  FOCUS
+  MOVEMENT
+  SOCIAL
+}
+
+enum QuestCategory {
+  FOCUS
+  WELLNESS
+  SOCIAL
+}
+
+enum QuestSource {
+  HOME_HUB
+  PLAYGROUND
+}
+
+enum BadgeType {
+  STAR_OF_THE_DAY
+  FOCUS_HERO
+  TEAM_SPARK
+  WELLNESS_CHAMP
+}

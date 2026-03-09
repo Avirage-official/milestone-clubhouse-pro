@@ -15,10 +15,25 @@ import BreadcrumbComp from '@/app/(DashboardLayout)/layout/shared/breadcrumb/Bre
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+
+// Toggle this flag to show/hide the manager-only "Teams & access" card
+const isManager = true
+const TEAM_SAVE_NOTIFICATION_DURATION_MS = 2000
+
+const DEMO_TEAMS = [
+  { name: 'Product', description: 'Core team' },
+  { name: 'Engineering', description: 'Core team' },
+  { name: 'Sales', description: 'Project squad' },
+  { name: 'Marketing', description: 'Project squad' },
+  { name: 'People Ops', description: 'Core team' },
+  { name: 'Support', description: 'Project squad' },
+]
 
 const UserProfile = () => {
   const [openModal, setOpenModal] = useState(false)
-  const [modalType, setModalType] = useState<'personal' | 'address' | null>(
+  const [modalType, setModalType] = useState<'personal' | 'preferences' | null>(
     null
   )
 
@@ -28,49 +43,85 @@ const UserProfile = () => {
       title: 'Home',
     },
     {
-      title: 'Userprofile',
+      title: 'My Clubhouse profile',
     },
   ]
 
   const [personal, setPersonal] = useState({
-    firstName: 'Mathew',
-    lastName: 'Anderson',
+    preferredName: 'Mathew',
+    role: 'Team Leader',
     email: 'mathew.anderson@gmail.com',
-    phone: '(347) 528-1947',
-    position: 'Team Leader',
+    location: 'Singapore',
+    primaryTeam: 'Product',
+    timeZone: 'GMT+8',
+    workPattern: 'Hybrid · 3 days in office',
     facebook: 'https://www.facebook.com/wrappixel',
     twitter: 'https://twitter.com/wrappixel',
     github: 'https://github.com/wrappixel',
     dribbble: 'https://dribbble.com/wrappixel',
   })
 
-  const [address, setAddress] = useState({
-    location: 'United States',
-    state: 'San Diego, California, United States',
-    pin: '92101',
-    zip: '30303',
-    taxNo: 'GA45273910',
+  const [preferences, setPreferences] = useState({
+    workdayFocus: 'Deep focus',
+    breakPreference: 'Standard',
+    socialPreference: 'Medium',
+    petName: 'Nova',
+    petType: 'Fox',
+    petPersonality: 'Chill',
+    notificationTone: 'Playful',
   })
 
   const [tempPersonal, setTempPersonal] = useState(personal)
-  const [tempAddress, setTempAddress] = useState(address)
+  const [tempPreferences, setTempPreferences] = useState(preferences)
+
+  // Teams & access state
+  const [selectedTeams, setSelectedTeams] = useState<string[]>([
+    'Product',
+    'Engineering',
+  ])
+  const [primaryTeam, setPrimaryTeam] = useState('Product')
+  const [teamSaved, setTeamSaved] = useState(false)
 
   useEffect(() => {
     if (openModal && modalType === 'personal') {
       setTempPersonal(personal)
     }
-    if (openModal && modalType === 'address') {
-      setTempAddress(address)
+    if (openModal && modalType === 'preferences') {
+      setTempPreferences(preferences)
     }
-  }, [openModal, modalType, personal, address])
+  }, [openModal, modalType, personal, preferences])
 
   const handleSave = () => {
     if (modalType === 'personal') {
       setPersonal(tempPersonal)
-    } else if (modalType === 'address') {
-      setAddress(tempAddress)
+    } else if (modalType === 'preferences') {
+      setPreferences(tempPreferences)
     }
     setOpenModal(false)
+  }
+
+  const handleTeamCheckboxChange = (teamName: string, checked: boolean) => {
+    if (checked) {
+      setSelectedTeams((prev: string[]) => [...prev, teamName])
+    } else {
+      // Don't allow unchecking the primary team
+      if (teamName === primaryTeam) return
+      setSelectedTeams((prev: string[]) => prev.filter((t: string) => t !== teamName))
+    }
+  }
+
+  const handlePrimaryTeamChange = (teamName: string) => {
+    setPrimaryTeam(teamName)
+    // Ensure the primary team is also checked
+    setSelectedTeams((prev: string[]) =>
+      prev.includes(teamName) ? prev : [...prev, teamName]
+    )
+  }
+
+  const handleSaveTeams = () => {
+    console.log('Saved team membership:', { selectedTeams, primaryTeam })
+    setTeamSaved(true)
+    setTimeout(() => setTeamSaved(false), TEAM_SAVE_NOTIFICATION_DURATION_MS)
   }
 
   const socialLinks = [
@@ -91,7 +142,7 @@ const UserProfile = () => {
 
   return (
     <>
-      <BreadcrumbComp title='User Profile' items={BCrumb} />
+      <BreadcrumbComp title='My Clubhouse profile' items={BCrumb} />
       <div className='flex flex-col gap-6'>
         <CardBox className='p-6 overflow-hidden'>
           <div className='flex flex-col sm:flex-row items-center gap-6 rounded-xl relative w-full break-words'>
@@ -107,15 +158,15 @@ const UserProfile = () => {
             <div className='flex flex-wrap gap-4 justify-center sm:justify-between items-center w-full'>
               <div className='flex flex-col sm:text-left text-center gap-1.5'>
                 <h5 className='card-title'>
-                  {personal.firstName} {personal.lastName}
+                  {personal.preferredName}
                 </h5>
                 <div className='flex flex-wrap items-center gap-1 md:gap-3'>
                   <p className='text-sm text-gray-500 dark:text-gray-400'>
-                    {personal.position}
+                    {personal.primaryTeam} · {personal.role}
                   </p>
                   <div className='hidden h-4 w-px bg-gray-300 dark:bg-gray-700 xl:block'></div>
                   <p className='text-sm text-gray-500 dark:text-gray-400'>
-                    {address.location}
+                    {personal.location} · {personal.timeZone}
                   </p>
                 </div>
               </div>
@@ -135,28 +186,37 @@ const UserProfile = () => {
         </CardBox>
 
         <div className='grid grid-cols-1 xl:grid-cols-2 gap-6'>
+          {/* Left card – Personal & Clubhouse info */}
           <div className='space-y-6 rounded-xl border border-border  md:p-6 p-4 relative w-full break-words'>
-            <h5 className='card-title'>Personal Information</h5>
+            <h5 className='card-title'>Personal information</h5>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-7 2xl:gap-x-32'>
               <div>
-                <p className='text-xs text-gray-500'>First Name</p>
-                <p>{personal.firstName}</p>
+                <p className='text-xs text-gray-500'>Preferred name</p>
+                <p>{personal.preferredName}</p>
               </div>
               <div>
-                <p className='text-xs text-gray-500'>Last Name</p>
-                <p>{personal.lastName}</p>
+                <p className='text-xs text-gray-500'>Primary team</p>
+                <p>{personal.primaryTeam}</p>
               </div>
               <div>
-                <p className='text-xs text-gray-500'>Email</p>
+                <p className='text-xs text-gray-500'>Role / What you do</p>
+                <p>{personal.role}</p>
+              </div>
+              <div>
+                <p className='text-xs text-gray-500'>Time zone</p>
+                <p>{personal.timeZone}</p>
+              </div>
+              <div>
+                <p className='text-xs text-gray-500'>Work email</p>
                 <p>{personal.email}</p>
               </div>
               <div>
-                <p className='text-xs text-gray-500'>Phone</p>
-                <p>{personal.phone}</p>
+                <p className='text-xs text-gray-500'>Work pattern</p>
+                <p>{personal.workPattern}</p>
               </div>
               <div>
-                <p className='text-xs text-gray-500'>Position</p>
-                <p>{personal.position}</p>
+                <p className='text-xs text-gray-500'>Location</p>
+                <p>{personal.location}</p>
               </div>
             </div>
             <div className='flex justify-end'>
@@ -172,34 +232,43 @@ const UserProfile = () => {
             </div>
           </div>
 
+          {/* Right card – Clubhouse preferences & pet */}
           <div className='space-y-6 rounded-xl border border-border  md:p-6 p-4 relative w-full break-words'>
-            <h5 className='card-title'>Address Details</h5>
+            <h5 className='card-title'>Clubhouse preferences</h5>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-7 2xl:gap-x-32'>
               <div>
-                <p className='text-xs text-gray-500'>Location</p>
-                <p>{address.location}</p>
+                <p className='text-xs text-gray-500'>Workday focus</p>
+                <p>{preferences.workdayFocus}</p>
               </div>
               <div>
-                <p className='text-xs text-gray-500'>Province / State</p>
-                <p>{address.state}</p>
+                <p className='text-xs text-gray-500'>Pet name</p>
+                <p>{preferences.petName}</p>
               </div>
               <div>
-                <p className='text-xs text-gray-500'>PIN Code</p>
-                <p>{address.pin}</p>
+                <p className='text-xs text-gray-500'>Break preference</p>
+                <p>{preferences.breakPreference}</p>
               </div>
               <div>
-                <p className='text-xs text-gray-500'>ZIP</p>
-                <p>{address.zip}</p>
+                <p className='text-xs text-gray-500'>Pet type</p>
+                <p>{preferences.petType}</p>
               </div>
               <div>
-                <p className='text-xs text-gray-500'>Federal Tax No.</p>
-                <p>{address.taxNo}</p>
+                <p className='text-xs text-gray-500'>Social preference</p>
+                <p>{preferences.socialPreference}</p>
+              </div>
+              <div>
+                <p className='text-xs text-gray-500'>Pet personality</p>
+                <p>{preferences.petPersonality}</p>
+              </div>
+              <div>
+                <p className='text-xs text-gray-500'>Notification tone</p>
+                <p>{preferences.notificationTone}</p>
               </div>
             </div>
             <div className='flex justify-end'>
               <Button
                 onClick={() => {
-                  setModalType('address')
+                  setModalType('preferences')
                   setOpenModal(true)
                 }}
                 color={'primary'}
@@ -209,6 +278,88 @@ const UserProfile = () => {
             </div>
           </div>
         </div>
+
+        {/* Manager-only card – Teams & access */}
+        {isManager && (
+          <div className='space-y-6 rounded-xl border border-border md:p-6 p-4 relative w-full break-words'>
+            <div>
+              <h5 className='card-title'>Teams &amp; access</h5>
+              <p className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
+                Choose which teams this person belongs to and which one is
+                primary.
+              </p>
+            </div>
+            <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-7 2xl:gap-x-32'>
+              {/* Left side – Teams (checkboxes) */}
+              <div>
+                <p className='text-xs text-gray-500 mb-3'>Teams</p>
+                <div className='flex flex-col gap-3'>
+                  {DEMO_TEAMS.map((team) => (
+                    <div
+                      key={team.name}
+                      className='flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors'>
+                      <Checkbox
+                        id={`team-${team.name}`}
+                        checked={selectedTeams.includes(team.name)}
+                        onCheckedChange={(checked) =>
+                          handleTeamCheckboxChange(team.name, !!checked)
+                        }
+                      />
+                      <Label
+                        htmlFor={`team-${team.name}`}
+                        className='flex items-center gap-2 cursor-pointer'>
+                        {team.name}
+                        <span className='text-xs text-gray-400'>
+                          {team.description}
+                        </span>
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right side – Primary team (radios) */}
+              <div>
+                <p className='text-xs text-gray-500 mb-3'>Primary team</p>
+                <RadioGroup
+                  value={primaryTeam}
+                  onValueChange={handlePrimaryTeamChange}
+                  className='flex flex-col gap-3'>
+                  {DEMO_TEAMS.map((team) => (
+                    <div
+                      key={team.name}
+                      className='flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors'>
+                      <RadioGroupItem
+                        value={team.name}
+                        id={`primary-${team.name}`}
+                      />
+                      <Label
+                        htmlFor={`primary-${team.name}`}
+                        className='cursor-pointer'>
+                        {team.name}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+                <p className='text-xs text-gray-400 mt-4'>
+                  Primary team controls where this person appears in leader
+                  dashboards.
+                </p>
+              </div>
+            </div>
+            <div className='flex items-center justify-end gap-3'>
+              {teamSaved && (
+                <span className='text-xs text-success'>Saved locally</span>
+              )}
+              <Button
+                onClick={handleSaveTeams}
+                color={'primary'}
+                className='flex items-center gap-1.5 rounded-md'>
+                Save team membership
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       <Dialog open={openModal} onOpenChange={setOpenModal}>
@@ -217,45 +368,73 @@ const UserProfile = () => {
             <DialogTitle className='mb-4'>
               {modalType === 'personal'
                 ? 'Edit Personal Information'
-                : 'Edit Address Details'}
+                : 'Edit Clubhouse Preferences'}
             </DialogTitle>
           </DialogHeader>
 
           {modalType === 'personal' ? (
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='firstName'>First Name</Label>
+                <Label htmlFor='preferredName'>Preferred name</Label>
                 <Input
-                  id='firstName'
-                  placeholder='First Name'
-                  value={tempPersonal.firstName}
+                  id='preferredName'
+                  placeholder='Preferred name'
+                  value={tempPersonal.preferredName}
                   onChange={(e) =>
                     setTempPersonal({
                       ...tempPersonal,
-                      firstName: e.target.value,
+                      preferredName: e.target.value,
                     })
                   }
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='lastName'>Last Name</Label>
+                <Label htmlFor='primaryTeam'>Primary team</Label>
                 <Input
-                  id='lastName'
-                  placeholder='Last Name'
-                  value={tempPersonal.lastName}
+                  id='primaryTeam'
+                  placeholder='Primary team'
+                  value={tempPersonal.primaryTeam}
                   onChange={(e) =>
                     setTempPersonal({
                       ...tempPersonal,
-                      lastName: e.target.value,
+                      primaryTeam: e.target.value,
                     })
                   }
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='email'>Email</Label>
+                <Label htmlFor='role'>Role / What you do</Label>
+                <Input
+                  id='role'
+                  placeholder='Role'
+                  value={tempPersonal.role}
+                  onChange={(e) =>
+                    setTempPersonal({
+                      ...tempPersonal,
+                      role: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <Label htmlFor='timeZone'>Time zone</Label>
+                <Input
+                  id='timeZone'
+                  placeholder='Time zone'
+                  value={tempPersonal.timeZone}
+                  onChange={(e) =>
+                    setTempPersonal({
+                      ...tempPersonal,
+                      timeZone: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <Label htmlFor='email'>Work email</Label>
                 <Input
                   id='email'
-                  placeholder='Email'
+                  placeholder='Work email'
                   value={tempPersonal.email}
                   onChange={(e) =>
                     setTempPersonal({ ...tempPersonal, email: e.target.value })
@@ -263,79 +442,29 @@ const UserProfile = () => {
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='phone'>Phone</Label>
+                <Label htmlFor='workPattern'>Work pattern</Label>
                 <Input
-                  id='phone'
-                  placeholder='Phone'
-                  value={tempPersonal.phone}
-                  onChange={(e) =>
-                    setTempPersonal({ ...tempPersonal, phone: e.target.value })
-                  }
-                />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <Label htmlFor='position'>Position</Label>
-                <Input
-                  id='position'
-                  placeholder='Position'
-                  value={tempPersonal.position}
+                  id='workPattern'
+                  placeholder='Work pattern'
+                  value={tempPersonal.workPattern}
                   onChange={(e) =>
                     setTempPersonal({
                       ...tempPersonal,
-                      position: e.target.value,
+                      workPattern: e.target.value,
                     })
                   }
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='facebook'>Facebook URL</Label>
+                <Label htmlFor='location'>Location</Label>
                 <Input
-                  id='facebook'
-                  placeholder='Facebook URL'
-                  value={tempPersonal.facebook}
+                  id='location'
+                  placeholder='Location'
+                  value={tempPersonal.location}
                   onChange={(e) =>
                     setTempPersonal({
                       ...tempPersonal,
-                      facebook: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <Label htmlFor='twitter'>Twitter URL</Label>
-                <Input
-                  id='twitter'
-                  placeholder='Twitter URL'
-                  value={tempPersonal.twitter}
-                  onChange={(e) =>
-                    setTempPersonal({
-                      ...tempPersonal,
-                      twitter: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <Label htmlFor='github'>GitHub URL</Label>
-                <Input
-                  id='github'
-                  placeholder='GitHub URL'
-                  value={tempPersonal.github}
-                  onChange={(e) =>
-                    setTempPersonal({ ...tempPersonal, github: e.target.value })
-                  }
-                />
-              </div>
-              <div className='flex flex-col gap-2'>
-                <Label htmlFor='dribbble'>Dribbble URL</Label>
-                <Input
-                  id='dribbble'
-                  placeholder='Dribbble URL'
-                  value={tempPersonal.dribbble}
-                  onChange={(e) =>
-                    setTempPersonal({
-                      ...tempPersonal,
-                      dribbble: e.target.value,
+                      location: e.target.value,
                     })
                   }
                 />
@@ -344,57 +473,100 @@ const UserProfile = () => {
           ) : (
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='location'>Location</Label>
+                <Label htmlFor='workdayFocus'>Workday focus</Label>
                 <Input
-                  id='location'
-                  placeholder='Location'
-                  value={tempAddress.location}
+                  id='workdayFocus'
+                  placeholder='e.g. Deep focus, Balanced, Social'
+                  value={tempPreferences.workdayFocus}
                   onChange={(e) =>
-                    setTempAddress({ ...tempAddress, location: e.target.value })
+                    setTempPreferences({
+                      ...tempPreferences,
+                      workdayFocus: e.target.value,
+                    })
                   }
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='state'>Province / State</Label>
+                <Label htmlFor='petName'>Pet name</Label>
                 <Input
-                  id='state'
-                  placeholder='Province / State'
-                  value={tempAddress.state}
+                  id='petName'
+                  placeholder='Pet name'
+                  value={tempPreferences.petName}
                   onChange={(e) =>
-                    setTempAddress({ ...tempAddress, state: e.target.value })
+                    setTempPreferences({
+                      ...tempPreferences,
+                      petName: e.target.value,
+                    })
                   }
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='pin'>PIN Code</Label>
+                <Label htmlFor='breakPreference'>Break preference</Label>
                 <Input
-                  id='pin'
-                  placeholder='PIN Code'
-                  value={tempAddress.pin}
+                  id='breakPreference'
+                  placeholder='e.g. Light, Standard, Frequent'
+                  value={tempPreferences.breakPreference}
                   onChange={(e) =>
-                    setTempAddress({ ...tempAddress, pin: e.target.value })
+                    setTempPreferences({
+                      ...tempPreferences,
+                      breakPreference: e.target.value,
+                    })
                   }
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='zip'>ZIP</Label>
+                <Label htmlFor='petType'>Pet type</Label>
                 <Input
-                  id='zip'
-                  placeholder='ZIP'
-                  value={tempAddress.zip}
+                  id='petType'
+                  placeholder='e.g. Fox, Dog, Robot'
+                  value={tempPreferences.petType}
                   onChange={(e) =>
-                    setTempAddress({ ...tempAddress, zip: e.target.value })
+                    setTempPreferences({
+                      ...tempPreferences,
+                      petType: e.target.value,
+                    })
                   }
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <Label htmlFor='taxNo'>Federal Tax No.</Label>
+                <Label htmlFor='socialPreference'>Social preference</Label>
                 <Input
-                  id='taxNo'
-                  placeholder='Federal Tax No.'
-                  value={tempAddress.taxNo}
+                  id='socialPreference'
+                  placeholder='e.g. Low, Medium, High'
+                  value={tempPreferences.socialPreference}
                   onChange={(e) =>
-                    setTempAddress({ ...tempAddress, taxNo: e.target.value })
+                    setTempPreferences({
+                      ...tempPreferences,
+                      socialPreference: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <Label htmlFor='petPersonality'>Pet personality</Label>
+                <Input
+                  id='petPersonality'
+                  placeholder='e.g. Chill, Energetic, Motivator'
+                  value={tempPreferences.petPersonality}
+                  onChange={(e) =>
+                    setTempPreferences({
+                      ...tempPreferences,
+                      petPersonality: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <Label htmlFor='notificationTone'>Notification tone</Label>
+                <Input
+                  id='notificationTone'
+                  placeholder='e.g. Chill, Playful'
+                  value={tempPreferences.notificationTone}
+                  onChange={(e) =>
+                    setTempPreferences({
+                      ...tempPreferences,
+                      notificationTone: e.target.value,
+                    })
                   }
                 />
               </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { Icon } from "@iconify/react";
-import { TicketType } from "@/app/(DashboardLayout)/types/ticket";
+import { Ticket } from "@/app/(DashboardLayout)/types/ticket";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -23,7 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface TicketListingProps {
-  tickets: TicketType[];
+  tickets: Ticket[];
   deleteTicket: (id: number) => void;
   onViewDetails: (id: number) => void;
   searchTickets: (term: string) => void;
@@ -32,24 +32,24 @@ interface TicketListingProps {
 }
 
 const stageLabelMap: Record<string, string> = {
-  new: "New",
-  manager_review: "Manager",
-  ceo_review: "CEO",
-  completed: "Completed",
-  rejected: "Rejected",
+  NEW: "New",
+  MANAGER_REVIEW: "Manager",
+  CEO_REVIEW: "CEO",
+  COMPLETED: "Completed",
+  REJECTED: "Rejected",
 };
 
 const stageBadgeVariant = (stage: string) => {
   switch (stage) {
-    case "new":
+    case "NEW":
       return "lightPrimary";
-    case "manager_review":
+    case "MANAGER_REVIEW":
       return "lightWarning";
-    case "ceo_review":
+    case "CEO_REVIEW":
       return "lightSuccess";
-    case "completed":
+    case "COMPLETED":
       return "lightSuccess";
-    case "rejected":
+    case "REJECTED":
       return "lightError";
     default:
       return "default";
@@ -58,11 +58,11 @@ const stageBadgeVariant = (stage: string) => {
 
 const statusBadgeVariant = (status: string) => {
   switch (status) {
-    case "open":
+    case "OPEN":
       return "lightSuccess";
-    case "on_hold":
+    case "ON_HOLD":
       return "lightWarning";
-    case "closed":
+    case "CLOSED":
       return "lightError";
     default:
       return "default";
@@ -70,9 +70,9 @@ const statusBadgeVariant = (status: string) => {
 };
 
 const statusLabelMap: Record<string, string> = {
-  open: "Open",
-  on_hold: "On Hold",
-  closed: "Closed",
+  OPEN: "Open",
+  ON_HOLD: "On Hold",
+  CLOSED: "Closed",
 };
 
 const TicketListing: React.FC<TicketListingProps> = ({
@@ -84,7 +84,7 @@ const TicketListing: React.FC<TicketListingProps> = ({
   filter,
 }) => {
   const getVisibleTickets = (
-    tickets: TicketType[],
+    tickets: Ticket[],
     filter: string,
     ticketSearch: string
   ) => {
@@ -92,7 +92,6 @@ const TicketListing: React.FC<TicketListingProps> = ({
 
     return tickets.filter(
       (ticket) =>
-        !ticket.deleted &&
         (filter === "total_tickets" || ticket.stage === filter) &&
         ticket.title.toLowerCase().includes(lowerSearch)
     );
@@ -134,8 +133,8 @@ const TicketListing: React.FC<TicketListingProps> = ({
           </TableHeader>
           <TableBody>
             {visibleTickets.map((ticket) => (
-              <TableRow key={ticket.Id}>
-                <TableCell>{ticket.Id}</TableCell>
+              <TableRow key={ticket.id}>
+                <TableCell>{ticket.id}</TableCell>
 
                 <TableCell className="max-w-xs">
                   <h6 className="text-base truncate">{ticket.title}</h6>
@@ -175,7 +174,7 @@ const TicketListing: React.FC<TicketListingProps> = ({
                           variant="ghost"
                           size="icon"
                           className="hover:text-primary"
-                          onClick={() => onViewDetails(ticket.Id)}
+                          onClick={() => onViewDetails(ticket.id)}
                         >
                           <Icon icon="tabler:eye" height="18" />
                         </Button>

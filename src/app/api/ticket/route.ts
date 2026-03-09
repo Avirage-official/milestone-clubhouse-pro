@@ -115,6 +115,35 @@ let TicketData: Ticket[] = [
     submittedAt: '2026-03-02T09:30:00Z',
     updatedAt: '2026-03-02T09:30:00Z',
   },
+  {
+    id: 9,
+    title: 'Reassign engineering pods',
+    description: 'Move backend pod to report under VP of Platform',
+    companyName: 'Acme Corp',
+    requestType: 'ORG_CHANGE',
+    stage: 'MANAGER_REVIEW',
+    status: 'OPEN',
+    assignedToAdmin: 'Liam',
+    submittedBy: 'Sarah Tan',
+    managerName: 'Carol Davis',
+    submittedAt: '2026-03-06T11:00:00Z',
+    updatedAt: '2026-03-06T11:00:00Z',
+  },
+  {
+    id: 10,
+    title: 'Approve new vendor security policy',
+    description: 'Require SOC 2 compliance for all SaaS vendors above $10k/yr',
+    companyName: 'Initech',
+    requestType: 'POLICY_CHANGE',
+    stage: 'CEO_REVIEW',
+    status: 'OPEN',
+    assignedToAdmin: 'Jack',
+    submittedBy: 'Tom Baker',
+    managerName: 'Eva Chen',
+    ceoName: 'Frank Lee',
+    submittedAt: '2026-03-04T15:30:00Z',
+    updatedAt: '2026-03-04T15:30:00Z',
+  },
 ]
 
 let resetTickets = [...TicketData]
@@ -153,6 +182,25 @@ export async function DELETE(req: NextRequest) {
     const tickets = TicketData.filter((ticket) => ticket.id !== id)
     TicketData = tickets
     return NextResponse.json({ status: 200, msg: 'Success', data: TicketData })
+  } catch (error) {
+    return NextResponse.json({
+      status: 400,
+      msg: 'Internal server error',
+      error,
+    })
+  }
+}
+
+// PUT endpoint for updating a change request (stage, status, etc.)
+export async function PUT(req: NextRequest) {
+  try {
+    const updates = await req.json()
+    const index = TicketData.findIndex((t) => t.id === updates.id)
+    if (index === -1) {
+      return NextResponse.json({ status: 404, msg: 'Ticket not found' })
+    }
+    TicketData[index] = { ...TicketData[index], ...updates, updatedAt: new Date().toISOString() }
+    return NextResponse.json({ status: 200, msg: 'Success', data: TicketData[index] })
   } catch (error) {
     return NextResponse.json({
       status: 400,

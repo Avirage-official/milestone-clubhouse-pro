@@ -85,7 +85,7 @@ const InviteTable: React.FC<InviteTableProps> = ({
       <div className="grid grid-cols-12 gap-4 mb-6">
         <div className="lg:col-span-4 md:col-span-4 col-span-12 p-4 bg-lightwarning text-center rounded-md">
           <h3 className="text-warning text-2xl">{pendingCount}</h3>
-          <h6 className="text-sm text-warning">Invited this month</h6>
+          <h6 className="text-sm text-warning">Pending invites</h6>
         </div>
         <div className="lg:col-span-4 md:col-span-4 col-span-12 p-4 bg-lightprimary text-center rounded-md">
           <h3 className="text-primary text-2xl">{inProgressCount}</h3>

@@ -39,11 +39,11 @@ const UserProfile = () => {
 
   const BCrumb = [
     {
-      to: '/',
+      to: '/dashboard',
       title: 'Home',
     },
     {
-      title: 'My Clubhouse profile',
+      title: 'My Profile',
     },
   ]
 
@@ -142,7 +142,7 @@ const UserProfile = () => {
 
   return (
     <>
-      <BreadcrumbComp title='My Clubhouse profile' items={BCrumb} />
+      <BreadcrumbComp title='My Profile' items={BCrumb} />
       <div className='flex flex-col gap-6'>
         <CardBox className='p-6 overflow-hidden'>
           <div className='flex flex-col sm:flex-row items-center gap-6 rounded-xl relative w-full break-words'>
@@ -232,9 +232,9 @@ const UserProfile = () => {
             </div>
           </div>
 
-          {/* Right card – Clubhouse preferences & pet */}
+          {/* Right card – Preferences & pet */}
           <div className='space-y-6 rounded-xl border border-border  md:p-6 p-4 relative w-full break-words'>
-            <h5 className='card-title'>Clubhouse preferences</h5>
+            <h5 className='card-title'>Preferences</h5>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-7 2xl:gap-x-32'>
               <div>
                 <p className='text-xs text-gray-500'>Workday focus</p>
@@ -368,7 +368,7 @@ const UserProfile = () => {
             <DialogTitle className='mb-4'>
               {modalType === 'personal'
                 ? 'Edit Personal Information'
-                : 'Edit Clubhouse Preferences'}
+                : 'Edit Preferences'}
             </DialogTitle>
           </DialogHeader>
 

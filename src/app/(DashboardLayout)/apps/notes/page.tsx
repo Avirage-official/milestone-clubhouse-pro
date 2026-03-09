@@ -3,16 +3,16 @@ import NotesApp from "@/app/components/apps/notes";
 import BreadcrumbComp from "../../layout/shared/breadcrumb/BreadcrumbComp";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Notes App",
+  title: "Work Notes",
 };
 
 const BCrumb = [
   {
-    to: "/",
+    to: "/dashboard",
     title: "Home",
   },
   {
-    title: "Notes",
+    title: "Work Notes",
   },
 ];
 const Notes = () => {
@@ -20,7 +20,7 @@ const Notes = () => {
   return (
     <>
      
-        <BreadcrumbComp title="Notes app" items={BCrumb} />
+        <BreadcrumbComp title="Work Notes" items={BCrumb} />
         <NotesApp/>
     </>
   );
